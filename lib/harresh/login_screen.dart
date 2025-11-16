@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'otp_verification_screen.dart';
 import '../raden/forgot_password.dart';
 import '../raden/forgot_email.dart';
+import '../amira/homepage/homepage.dart';
+
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -209,6 +211,11 @@ class _LoginScreenState extends State<LoginScreen> {
     // Simulate login process
     print('Logging in with: $email');
     _showSnackBar('Login successful!');
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const HomePage()),
+    );
   }
 
   void _showSnackBar(String message) {
