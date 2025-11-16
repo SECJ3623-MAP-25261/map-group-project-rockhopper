@@ -1,10 +1,10 @@
-# flutter_application_3
+# Pinjam Tech
+## Tech Rental for Everyone
 
-A new Flutter project.
+This app is for students to rent out their electronical items for a period of time with convenience via an app.
+They can also become the rentee and find the items they need for projects, events and so on.
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
+## The Default message of Flutter
 
 A few resources to get you started if this is your first Flutter project:
 
