@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-// import '../harresh/otp_verification_screen.dart';
+import 'forgot_password_2.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
   const ChangePasswordScreen({super.key});
@@ -9,146 +9,86 @@ class ChangePasswordScreen extends StatefulWidget {
 }
 
 class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
-  final _currentPasswordController = TextEditingController();
-  final _newPasswordController = TextEditingController();
-  final _confirmPasswordController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+
+  void _sendResetEmail() {
+    final email = _emailController.text.trim();
+
+    if (email.isEmpty) {
+      _showDialog("Please enter your email.");
+      return;
+    }
+
+    // Since we are NOT using Firebase, we directly navigate to screen 2.
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const ChangePasswordScreen2(),
+      ),
+    );
+  }
+
+  void _showDialog(String msg) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Notification"),
+        content: Text(msg),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text("OK"),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   void dispose() {
-    _currentPasswordController.dispose();
-    _newPasswordController.dispose();
-    _confirmPasswordController.dispose();
+    _emailController.dispose();
     super.dispose();
-  }
-
-  void _submit() {
-    final currentPass = _currentPasswordController.text.trim();
-    final newPass = _newPasswordController.text.trim();
-    final confirmPass = _confirmPasswordController.text.trim();
-
-    if (currentPass.isEmpty || newPass.isEmpty || confirmPass.isEmpty) {
-      _showSnackBar('Please fill in all fields');
-      return;
-    }
-
-    if (newPass != confirmPass) {
-      _showSnackBar('Passwords do not match');
-      return;
-    }
-
-    // TODO: connect with Firebase (reauth + updatePassword)
-    _showSnackBar('your password has been changed!');
-    Navigator.pop(context); // go back to login page
-  }
-
-  void _showSnackBar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: Colors.green,
-      ),
-    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.white,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: const Text(
-          'Change Password',
-          style: TextStyle(color: Colors.black),
-        ),
+      appBar: AppBar(title: const Text("Forgot Password"),
+              backgroundColor: Colors.white,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(24.0),
+        padding: const EdgeInsets.all(24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Current Password
             const Text(
-              'Current Password',
-              style: TextStyle(fontWeight: FontWeight.w500),
+              "Enter your email to receive a reset link.",
+              style: TextStyle(fontSize: 16),
             ),
-            const SizedBox(height: 8),
+
+            const SizedBox(height: 20),
+
             TextField(
-              controller: _currentPasswordController,
-              obscureText: true,
+              controller: _emailController,
+              keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
-                hintText: 'Enter current password',
+                hintText: "Email",
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
             ),
-            const SizedBox(height: 16),
 
-            // New Password
-            const Text(
-              'New Password',
-              style: TextStyle(fontWeight: FontWeight.w500),
-            ),
-            const SizedBox(height: 8),
-            TextField(
-              controller: _newPasswordController,
-              obscureText: true,
-              decoration: InputDecoration(
-                hintText: 'Enter new password',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
+            const SizedBox(height: 20),
+
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: _sendResetEmail,
+                child: const Text("Send Reset Link"),
               ),
             ),
-            const SizedBox(height: 16),
-
-            // Confirm Password
-            const Text(
-              'Confirm Password',
-              style: TextStyle(fontWeight: FontWeight.w500),
-            ),
-            const SizedBox(height: 8),
-            TextField(
-              controller: _confirmPasswordController,
-              obscureText: true,
-              decoration: InputDecoration(
-                hintText: 'Re-enter new password',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-            ),
-            const SizedBox(height: 40),
-
-            // Submit Button
-            Align(
-              alignment: Alignment.centerRight,
-              child: SizedBox(
-                width: 140,
-                height: 48,
-                child: ElevatedButton(
-                  onPressed: _submit,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  child: const Text(
-                    'Submit',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ),
-            )
           ],
         ),
       ),
