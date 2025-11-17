@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'otp_verification_screen.dart';
 import '../raden/forgot_password.dart';
 import '../raden/forgot_email.dart';
+import '../amira/homepage/home_page.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -172,6 +173,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: ElevatedButton(
                     onPressed: () {
                       _loginUser();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const HomePage(),
+                        ),
+                      );
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blue,
