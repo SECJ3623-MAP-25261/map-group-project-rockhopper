@@ -4,7 +4,6 @@ import '../raden/forgot_password.dart';
 import '../raden/forgot_email.dart';
 import '../amira/homepage/homepage.dart';
 
-
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
@@ -172,21 +171,27 @@ class _LoginScreenState extends State<LoginScreen> {
                   width: 120,
                   height: 50,
                   child: ElevatedButton(
-                    onPressed: () {
-                      _loginUser();
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    child: const Text(
-                      'DONE',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
+  onPressed: () {
+    _loginUser();
+
+    // Navigate to HomePage
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const HomePage()),
+    );
+  },
+  style: ElevatedButton.styleFrom(
+    backgroundColor: Colors.blue,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(8),
+    ),
+  ),
+  child: const Text(
+    'DONE',
+    style: TextStyle(
+      fontSize: 16,
+      fontWeight: FontWeight.w600,
+      color: Colors.white,
                       ),
                     ),
                   ),
@@ -217,6 +222,7 @@ class _LoginScreenState extends State<LoginScreen> {
       MaterialPageRoute(builder: (context) => const HomePage()),
     );
   }
+
 
   void _showSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
