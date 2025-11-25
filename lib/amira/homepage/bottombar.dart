@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 import 'package:flutter/widgets.dart';
 import 'homepage.dart';
+=======
+//import 'package:flutter/widgets.dart';
+import 'home_page.dart';
+>>>>>>> Stashed changes
 =======
 //import 'package:flutter/widgets.dart';
 import 'home_page.dart';
