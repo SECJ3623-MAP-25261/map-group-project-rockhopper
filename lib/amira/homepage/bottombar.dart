@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+<<<<<<< Updated upstream
 import 'package:flutter/widgets.dart';
 import 'homepage.dart';
+=======
+//import 'package:flutter/widgets.dart';
+import 'home_page.dart';
+>>>>>>> Stashed changes
 
 class BottomBar extends StatefulWidget{
   const BottomBar({super.key});

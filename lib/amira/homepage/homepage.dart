@@ -1,6 +1,75 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: const HomeScreen(),
+    );
+  }
+}
+
+// Main HomeScreen with BottomNavigation
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  int currentIndex = 0;
+
+  final List<Widget> pages = const [
+    HomePage(),
+    Center(child: Text("Rent Page", style: TextStyle(fontSize: 24))),
+    Center(child: Text("Profile Page", style: TextStyle(fontSize: 24))),
+  ];
+
+  void onTabTapped(int index) {
+    setState(() {
+      currentIndex = index;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: pages[currentIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: currentIndex,
+        onTap: onTabTapped,
+        backgroundColor: Colors.blueAccent,
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.white70,
+        showUnselectedLabels: false,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home, size: 28),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.add_circle, size: 28),
+            label: 'Rent',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person, size: 28),
+            label: 'Profile',
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// Your original HomePage code
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
@@ -9,17 +78,31 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       body: ListView(
         children: [
+          const SizedBox(height: 20),
+
+          // App Title
+          const Center(
+            child: Text(
+              "PinjamTech",
+              style: TextStyle(
+                fontSize: 26,
+                fontWeight: FontWeight.bold,
+                color: Colors.blue,
+              ),
+            ),
+          ),
+
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Column(
               children: const [
-                UserInfo(),
-                SizedBox(height: 10),
-                SearchDevice(),
-                DeviceAds(),
                 SizedBox(height: 20),
-                CategorySection(),
-                CategoryItems(),
+                SearchDevice(),
+                SizedBox(height: 20),
+                CategoryCircleSection(),
+                SizedBox(height: 20),
+                ItemCardList(),
+                SizedBox(height: 20),
               ],
             ),
           ),
@@ -29,66 +112,7 @@ class HomePage extends StatelessWidget {
   }
 }
 
-// ==========================================================
-//                        USER INFO
-// ==========================================================
 
-class UserInfo extends StatelessWidget {
-  const UserInfo({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      contentPadding: EdgeInsets.zero,
-      title: const Padding(
-        padding: EdgeInsets.only(bottom: 7),
-        child: Text("Hello!"),
-      ),
-      subtitle: Text(
-        "Jaafar",
-        style: Theme.of(context).textTheme.headlineSmall!.copyWith(
-              fontWeight: FontWeight.w700,
-            ),
-      ),
-      trailing: Stack(
-        alignment: Alignment.topRight,
-        children: [
-          Container(
-            height: 48,
-            width: 48,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(18),
-              image: const DecorationImage(
-                image: AssetImage(AppStyle.profile),
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-          Container(
-            height: 18,
-            width: 18,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.blue,
-              border: Border.all(
-                color: Colors.white,
-                width: 3,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class AppStyle {
-  static const String profile = "assets/images/profilepic.png";
-}
-
-// ==========================================================
-//                       SEARCH BAR
-// ==========================================================
 
 class SearchDevice extends StatelessWidget {
   const SearchDevice({super.key});
@@ -97,152 +121,147 @@ class SearchDevice extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextField(
       decoration: InputDecoration(
-        hintText: "Search Device",
+        hintText: "Search Devices",
         filled: true,
         fillColor: Colors.grey[200],
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide.none,
         ),
-        prefixIcon: CupertinoButton(
-          padding: EdgeInsets.zero,
-          onPressed: () {},
-          child: const Icon(Icons.search),
-        ),
-        suffixIcon: CupertinoButton(
-          padding: EdgeInsets.zero,
-          onPressed: () {},
-          child: const Icon(Icons.filter_list),
-        ),
+        prefixIcon: const Icon(Icons.search),
+        suffixIcon: const Icon(Icons.chat_bubble_outline),
       ),
     );
   }
 }
 
-// ==========================================================
-//                        WIDGET HELPERS
-// ==========================================================
+class CategoryCircleSection extends StatelessWidget {
+  const CategoryCircleSection({super.key});
 
-Widget _adImage(String path) {
-  return Container(
-    margin: const EdgeInsets.only(right: 12),
-    child: ClipRRect(
-      borderRadius: BorderRadius.circular(16),
-      child: Image.asset(
-        path,
-        width: 250,
-        height: 160,
-        fit: BoxFit.cover,
-      ),
-    ),
-  );
-}
-
-Widget _rentalOption(IconData icon, String label) {
-  return Column(
-    mainAxisSize: MainAxisSize.min,
-    children: [
-      CircleAvatar(
-        radius: 30,
-        backgroundColor: Colors.blue[100],
-        child: Icon(icon, size: 30, color: Colors.blue),
-      ),
-      const SizedBox(height: 8),
-      Text(label),
-    ],
-  );
-}
-
-// ==========================================================
-//                        DEVICE ADS
-// ==========================================================
-
-class DeviceAds extends StatelessWidget {
-  const DeviceAds({super.key});
+  Widget circleItem(String text) {
+    return Column(
+      children: [
+        CircleAvatar(
+          radius: 28,
+          backgroundColor: Colors.grey[300],
+        ),
+        const SizedBox(height: 8),
+        Text(text,
+            style: const TextStyle(
+              fontSize: 12,
+            ))
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(
-          height: 160,
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: [
-                _adImage("assets/images/rent.jpg"),
-                _adImage("assets/images/vrheadset.jpg"),
-                _adImage("assets/images/phone2.jpg"),
-                _adImage("assets/images/gaminglaptop.png"),
-                _adImage("assets/images/device1.jpg"),
-                _adImage("assets/images/device2.png"),
-                _adImage("assets/images/device3.png"),
-                _adImage("assets/images/device4.png"),
-              ],
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: const [
+            Text(
+              "what do you want to rent?",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
             ),
-          ),
+            Text("View all"),
+          ],
         ),
-
-        const Padding(
-          padding: EdgeInsets.only(top: 20, left: 16),
-          child: Text(
-            "What do you want to rent?",
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-
-        const SizedBox(height: 10),
-
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Wrap(
-            spacing: 40,
-            runSpacing: 20,
-            children: [
-              _rentalOption(Icons.phone_android, "Phones"),
-              _rentalOption(Icons.laptop_mac, "Laptops"),
-              _rentalOption(Icons.tablet_mac, "Tablets"),
-              _rentalOption(Icons.watch, "Watches"),
-              _rentalOption(Icons.vrpano, "VR Headsets"),
-            ],
-          ),
+        const SizedBox(height: 15),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            circleItem("Tablets"),
+            circleItem("Laptops"),
+            circleItem("Phones"),
+            circleItem("xR/VR Box"),
+          ],
         ),
       ],
     );
   }
 }
 
-// ==========================================================
-//                       CATEGORY SECTION
-// ==========================================================
-
-class CategorySection extends StatelessWidget {
-  const CategorySection({super.key});
+class ItemCardList extends StatelessWidget {
+  const ItemCardList({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 30),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: const [
-          Text(
-            "Categories",
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
+    return Column(
+      children: const [
+        ItemCard(
+          name: "Lenovo Ideapad 3",
+          price: "RM 8/day",
+          available: true,
+          duration: "Up to 60 days",
+        ),
+        SizedBox(height: 20),
+        ItemCard(
+          name: "Acer Nitro V15",
+          price: "RM 10/day",
+          available: false,
+          duration: "Up to 60 days",
+        ),
+      ],
+    );
+  }
+}
+
+
+class ItemCard extends StatelessWidget {
+  final String name;
+  final String price;
+  final bool available;
+  final String duration;
+
+  const ItemCard({
+    super.key,
+    required this.name,
+    required this.price,
+    required this.available,
+    required this.duration,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: Colors.black26),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            height: 140,
+            decoration: BoxDecoration(
+              color: Colors.blue[200],
+              borderRadius: BorderRadius.circular(20),
             ),
           ),
-          Text(
-            "See All",
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.blue,
-            ),
+          const SizedBox(height: 10),
+          Text(name,
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+          const SizedBox(height: 5),
+          Text(price),
+          Row(
+            children: [
+              Icon(Icons.circle,
+                  size: 12, color: available ? Colors.green : Colors.red),
+              const SizedBox(width: 6),
+              Text(available ? "Available" : "Not Available"),
+            ],
+          ),
+          const SizedBox(height: 4),
+          Row(
+            children: const [
+              Icon(Icons.star, size: 14, color: Colors.yellow),
+              SizedBox(width: 6),
+              Text("Up to 60 days")
+            ],
           ),
         ],
       ),
@@ -250,46 +269,27 @@ class CategorySection extends StatelessWidget {
   }
 }
 
-// ==========================================================
-//                       CATEGORY ITEMS
-// ==========================================================
 
-class CategoryItems extends StatelessWidget {
-  const CategoryItems({super.key});
+class CustomBottomNav extends StatelessWidget {
+  const CustomBottomNav({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 20, bottom: 20),
-      child: SizedBox(
-        height: 100,
-        child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: [
-              _categoryItem(Icons.phone_android, "Phones"),
-              _categoryItem(Icons.laptop_mac, "Laptops"),
-              _categoryItem(Icons.tablet_mac, "Tablets"),
-              _categoryItem(Icons.watch, "Watches"),
-            ],
-          ),
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      decoration: const BoxDecoration(
+        color: Colors.blueAccent,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(25),
+          topRight: Radius.circular(25),
         ),
       ),
-    );
-  }
-
-  static Widget _categoryItem(IconData icon, String label) {
-    return Container(
-      margin: const EdgeInsets.only(right: 16),
-      child: Column(
-        children: [
-          CircleAvatar(
-            radius: 30,
-            backgroundColor: Colors.blue[100],
-            child: Icon(icon, size: 30, color: Colors.blue),
-          ),
-          const SizedBox(height: 8),
-          Text(label),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: const [
+          Icon(Icons.add_circle, color: Colors.white, size: 32),
+          Icon(Icons.bar_chart, color: Colors.white, size: 30),
+          Icon(Icons.person, color: Colors.white, size: 30),
         ],
       ),
     );
