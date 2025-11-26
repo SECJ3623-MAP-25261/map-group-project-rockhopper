@@ -1,75 +1,7 @@
 import 'package:flutter/material.dart';
+import 'search_screen.dart'; // SIMPLE IMPORT - same folder
 
-void main() {
-  runApp(const MyApp());
-}
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: const HomeScreen(),
-    );
-  }
-}
-
-// Main HomeScreen with BottomNavigation
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
-
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  int currentIndex = 0;
-
-  final List<Widget> pages = const [
-    HomePage(),
-    Center(child: Text("Rent Page", style: TextStyle(fontSize: 24))),
-    Center(child: Text("Profile Page", style: TextStyle(fontSize: 24))),
-  ];
-
-  void onTabTapped(int index) {
-    setState(() {
-      currentIndex = index;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: pages[currentIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: currentIndex,
-        onTap: onTabTapped,
-        backgroundColor: Colors.blueAccent,
-        selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.white70,
-        showUnselectedLabels: false,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home, size: 28),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.add_circle, size: 28),
-            label: 'Rent',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person, size: 28),
-            label: 'Profile',
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-// Your original HomePage code
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
@@ -83,7 +15,7 @@ class HomePage extends StatelessWidget {
           // App Title
           const Center(
             child: Text(
-              "PT",
+              "PinjamTech",
               style: TextStyle(
                 fontSize: 26,
                 fontWeight: FontWeight.bold,
@@ -112,29 +44,51 @@ class HomePage extends StatelessWidget {
   }
 }
 
-
-
 class SearchDevice extends StatelessWidget {
   const SearchDevice({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      decoration: InputDecoration(
-        hintText: "Search Devices",
-        filled: true,
-        fillColor: Colors.grey[200],
-        border: OutlineInputBorder(
+    return GestureDetector(
+      onTap: () {
+        print("Search field tapped"); // Debug print
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const SearchScreen()),
+        );
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.grey[200],
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide.none,
         ),
-        prefixIcon: const Icon(Icons.search),
-        suffixIcon: const Icon(Icons.chat_bubble_outline),
+        child: const Row(
+          children: [
+            Padding(
+              padding: EdgeInsets.only(left: 16.0, right: 12.0),
+              child: Icon(Icons.search, color: Colors.grey),
+            ),
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 16.0),
+                child: Text(
+                  "Search Devices",
+                  style: TextStyle(color: Colors.grey),
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(right: 16.0),
+              child: Icon(Icons.chat_bubble_outline, color: Colors.grey),
+            ),
+          ],
+        ),
       ),
     );
   }
 }
 
+// ... REST OF AMIRA'S ORIGINAL CODE REMAINS UNCHANGED ...
 class CategoryCircleSection extends StatelessWidget {
   const CategoryCircleSection({super.key});
 
@@ -163,7 +117,7 @@ class CategoryCircleSection extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              "HI",
+              "what do you want to rent?",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
             ),
             Text("View all"),
@@ -176,7 +130,7 @@ class CategoryCircleSection extends StatelessWidget {
             circleItem("Tablets"),
             circleItem("Laptops"),
             circleItem("Phones"),
-            circleItem("camera"),
+            circleItem("xR/VR Box"),
           ],
         ),
       ],
@@ -208,7 +162,6 @@ class ItemCardList extends StatelessWidget {
     );
   }
 }
-
 
 class ItemCard extends StatelessWidget {
   final String name;
@@ -263,33 +216,6 @@ class ItemCard extends StatelessWidget {
               Text("Up to 60 days")
             ],
           ),
-        ],
-      ),
-    );
-  }
-}
-
-
-class CustomBottomNav extends StatelessWidget {
-  const CustomBottomNav({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      decoration: const BoxDecoration(
-        color: Colors.blueAccent,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(25),
-          topRight: Radius.circular(25),
-        ),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: const [
-          Icon(Icons.add_circle, color: Colors.white, size: 32),
-          Icon(Icons.bar_chart, color: Colors.white, size: 30),
-          Icon(Icons.person, color: Colors.white, size: 30),
         ],
       ),
     );

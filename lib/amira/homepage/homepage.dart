@@ -1,76 +1,7 @@
 import 'package:flutter/material.dart';
+import 'search_screen.dart'; // SIMPLE IMPORT - same folder
 import '/raden/edit_listing.dart';
 
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: const HomeScreen(),
-    );
-  }
-}
-
-// Main HomeScreen with BottomNavigation
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
-
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  int currentIndex = 0;
-
-  final List<Widget> pages = const [
-    HomePage(),
-    Center(child: Text("Rent Page", style: TextStyle(fontSize: 24))),
-    Center(child: Text("Profile Page", style: TextStyle(fontSize: 24))),
-  ];
-
-  void onTabTapped(int index) {
-    setState(() {
-      currentIndex = index;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: pages[currentIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: currentIndex,
-        onTap: onTabTapped,
-        backgroundColor: Colors.blueAccent,
-        selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.white70,
-        showUnselectedLabels: false,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home, size: 28),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.add_circle, size: 28),
-            label: 'Rent',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person, size: 28),
-            label: 'Profile',
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-// Your original HomePage code
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
@@ -113,29 +44,51 @@ class HomePage extends StatelessWidget {
   }
 }
 
-
-
 class SearchDevice extends StatelessWidget {
   const SearchDevice({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      decoration: InputDecoration(
-        hintText: "Search Devices",
-        filled: true,
-        fillColor: Colors.grey[200],
-        border: OutlineInputBorder(
+    return GestureDetector(
+      onTap: () {
+        print("Search field tapped"); // Debug print
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const SearchScreen()),
+        );
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.grey[200],
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide.none,
         ),
-        prefixIcon: const Icon(Icons.search),
-        suffixIcon: const Icon(Icons.chat_bubble_outline),
+        child: const Row(
+          children: [
+            Padding(
+              padding: EdgeInsets.only(left: 16.0, right: 12.0),
+              child: Icon(Icons.search, color: Colors.grey),
+            ),
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 16.0),
+                child: Text(
+                  "Search Devices",
+                  style: TextStyle(color: Colors.grey),
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(right: 16.0),
+              child: Icon(Icons.chat_bubble_outline, color: Colors.grey),
+            ),
+          ],
+        ),
       ),
     );
   }
 }
 
+// ... REST OF AMIRA'S ORIGINAL CODE REMAINS UNCHANGED ...
 class CategoryCircleSection extends StatelessWidget {
   const CategoryCircleSection({super.key});
 
@@ -160,9 +113,9 @@ class CategoryCircleSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
+        const Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: const [
+          children: [
             Text(
               "what do you want to rent?",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
@@ -191,53 +144,24 @@ class ItemCardList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [
-        const ItemCard(
+      children: const [
+        ItemCard(
           name: "Lenovo Ideapad 3",
           price: "RM 8/day",
           available: true,
           duration: "Up to 60 days",
         ),
-        const SizedBox(height: 20),
-        const ItemCard(
+        SizedBox(height: 20),
+        ItemCard(
           name: "Acer Nitro V15",
           price: "RM 10/day",
           available: false,
           duration: "Up to 60 days",
         ),
-
-TextButton(
-  onPressed: () {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const EditListing(
-          name: "Acer Nitro V15",
-          price: "RM 10/day",
-          available: false,
-          duration: "Up to 60 days",
-          condition: "Rarely used",
-          description:
-          "This is the Acer Nitro V15, it’s Acer’s entry-level 15-inch gaming laptop, and it’s targeted towards gamers who are looking for the best specs without breaking the bank. In fact, it’s cheaper than the famous Helios 300 lineup and it competes directly with the MSI Bravo 15 and the Dell G5 15 SE.",
-          category: "Laptop",
-        ),
-      ),
-    );
-  },
-  child: const Text(
-    ' Edit ',
-    style: TextStyle(
-      color: Colors.blue,
-      fontSize: 14,
-    ),
-  ),
-),
-
       ],
     );
   }
 }
-
 
 class ItemCard extends StatelessWidget {
   final String name;
@@ -297,31 +221,3 @@ class ItemCard extends StatelessWidget {
     );
   }
 }
-
-
-class CustomBottomNav extends StatelessWidget {
-  const CustomBottomNav({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      decoration: const BoxDecoration(
-        color: Colors.blueAccent,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(25),
-          topRight: Radius.circular(25),
-        ),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: const [
-          Icon(Icons.add_circle, color: Colors.white, size: 32),
-          Icon(Icons.bar_chart, color: Colors.white, size: 30),
-          Icon(Icons.person, color: Colors.white, size: 30),
-        ],
-      ),
-    );
-  }
-}
- 
