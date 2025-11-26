@@ -1,5 +1,14 @@
 import 'package:flutter/material.dart';
+<<<<<<< Updated upstream
+=======
+import 'search_screen.dart'; 
+>>>>>>> Stashed changes
 import '/raden/edit_listing.dart';
+import '/raden/cart_manager.dart';
+import '/raden/renting_cart.dart';
+import '/raden/rentee_listing.dart';
+
+
 
 void main() {
   runApp(const MyApp());
@@ -82,16 +91,53 @@ class HomePage extends StatelessWidget {
           const SizedBox(height: 20),
 
           // App Title
-          const Center(
-            child: Text(
-              "PinjamTech",
-              style: TextStyle(
-                fontSize: 26,
-                fontWeight: FontWeight.bold,
-                color: Colors.blue,
-              ),
-            ),
+          Row(
+  mainAxisAlignment: MainAxisAlignment.center,
+  children: [
+    const Text(
+      "PinjamTech",
+      style: TextStyle(
+        fontSize: 26,
+        fontWeight: FontWeight.bold,
+        color: Colors.blue,
+      ),
+    ),
+    const SizedBox(width: 10),
+
+Stack(
+  children: [
+    GestureDetector(
+      onTap: () {
+        // Navigate to cart screen (placeholder)
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const RentingCartScreen(),
           ),
+        );
+      },
+      child: const Icon(Icons.shopping_cart, size: 28),
+    ),
+    Positioned(
+      right: 0,
+      child: Container(
+        padding: const EdgeInsets.all(4),
+        decoration: const BoxDecoration(
+          color: Colors.red,
+          shape: BoxShape.circle,
+        ),
+        child: Text(
+          CartManager().cart.length.toString(),
+          style: const TextStyle(color: Colors.white, fontSize: 12),
+        ),
+      ),
+    ),
+  ],
+),
+
+  ],
+),
+
 
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -114,7 +160,10 @@ class HomePage extends StatelessWidget {
 }
 
 
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 class SearchDevice extends StatelessWidget {
   const SearchDevice({super.key});
 
@@ -197,13 +246,24 @@ class ItemCardList extends StatelessWidget {
           price: "RM 8/day",
           available: true,
           duration: "Up to 60 days",
+          category: "laptop",
+          description: "The smarter choice for mobility\n Pre-installed genuine Windows Office 2024 ",
+          imagePath: "https://cdn.nbplaza.com.my/img/p/5/2/4/9/3/52493-large_default.jpg",
         ),
+<<<<<<< Updated upstream
         const SizedBox(height: 20),
         const ItemCard(
+=======
+        
+        SizedBox(height: 20),
+        ItemCard(
+>>>>>>> Stashed changes
           name: "Acer Nitro V15",
           price: "RM 10/day",
           available: false,
           duration: "Up to 60 days",
+          condition: "Rarely used",
+          category: "laptop",
         ),
 
 TextButton(
@@ -244,6 +304,10 @@ class ItemCard extends StatelessWidget {
   final String price;
   final bool available;
   final String duration;
+  final String? condition;
+  final String? description;
+  final String? category;
+  final String? imagePath; 
 
   const ItemCard({
     super.key,
@@ -251,6 +315,10 @@ class ItemCard extends StatelessWidget {
     required this.price,
     required this.available,
     required this.duration,
+    this.condition,
+    this.description,
+    this.category,
+    this.imagePath,
   });
 
   @override
@@ -264,18 +332,42 @@ class ItemCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // IMAGE HOLDER
           Container(
             height: 140,
+            width: double.infinity,
             decoration: BoxDecoration(
               color: Colors.blue[200],
               borderRadius: BorderRadius.circular(20),
+              image: imagePath != null
+                  ? DecorationImage(
+                      image: AssetImage(imagePath!),
+                      fit: BoxFit.cover,
+                    )
+                  : null,
+            ),
+            child: imagePath == null
+                ? const Icon(Icons.image, size: 70, color: Colors.white)
+                : null,
+          ),
+
+          const SizedBox(height: 10),
+
+          // NAME
+          Text(
+            name,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
             ),
           ),
-          const SizedBox(height: 10),
-          Text(name,
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+
           const SizedBox(height: 5),
+
+          // PRICE
           Text(price),
+
+          // AVAILABILITY
           Row(
             children: [
               Icon(Icons.circle,
@@ -284,19 +376,85 @@ class ItemCard extends StatelessWidget {
               Text(available ? "Available" : "Not Available"),
             ],
           ),
+
           const SizedBox(height: 4),
+
+          // DURATION DISPLAY
           Row(
-            children: const [
-              Icon(Icons.star, size: 14, color: Colors.yellow),
-              SizedBox(width: 6),
-              Text("Up to 60 days")
+            children: [
+              const Icon(Icons.star, size: 14, color: Colors.yellow),
+              const SizedBox(width: 6),
+              Text(duration),
             ],
           ),
+
+          const SizedBox(height: 10),
+
+          // dynamic data
+          // BUTTONS SECTION
+Align(
+  alignment: Alignment.centerRight,
+  child: Row(
+    mainAxisSize: MainAxisSize.min, // only take needed width
+    children: [
+      // Edit Button
+      TextButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => EditListing(
+                name: name,
+                price: price,
+                available: available,
+                duration: duration,
+                condition: condition ?? "Not specified",
+                description: description ?? "No description provided.",
+                category: category ?? "Uncategorized",
+                imagePath: imagePath,
+              ),
+            ),
+          );
+        },
+        child: const Text(
+          'Edit',
+          style: TextStyle(color: Colors.blue, fontSize: 14),
+        ),
+      ),
+
+      // Rent Button
+      TextButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => RenteeListing(
+                name: name,
+                price: price,
+                bookedSlots: [
+                  DateTime.utc(2025, 11, 5),
+                  DateTime.utc(2025, 11, 7),
+                  DateTime.utc(2025, 11, 20),
+                ],
+              ),
+            ),
+          );
+        },
+        child: const Text(
+          'Rent',
+          style: TextStyle(color: Colors.blue, fontSize: 14),
+        ),
+      ),
+    ],
+  ),
+),
+
         ],
       ),
     );
   }
 }
+<<<<<<< Updated upstream
 
 
 class CustomBottomNav extends StatelessWidget {
@@ -325,3 +483,5 @@ class CustomBottomNav extends StatelessWidget {
   }
 }
  
+=======
+>>>>>>> Stashed changes

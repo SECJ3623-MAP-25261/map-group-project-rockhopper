@@ -10,6 +10,7 @@ final String duration;
 final String condition;
 final String description;
 final String category;
+final String? imagePath;
 
 const EditListing({
     Key? key,
@@ -20,6 +21,8 @@ const EditListing({
     required this.condition,
     required this.description,
     required this.category,
+    required this.imagePath,
+
 }) : super(key: key);
 
 @override
@@ -82,7 +85,7 @@ void _deleteListing() {
 Widget build(BuildContext context) {
     return Scaffold(
     appBar: AppBar(
-        title: const Text('Acer Nitro V15'),
+        title: const Text('Your Listing'),
         actions: [
         PopupMenuButton<String>(
             icon: const Icon(Icons.more_vert),
@@ -103,7 +106,7 @@ Widget build(BuildContext context) {
                 ),
                 );
             }
-             if (value == 'delete') {
+            if (value == 'delete') {
     _confirmDelete();
   }
 },
@@ -134,20 +137,25 @@ Widget build(BuildContext context) {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
             // IMAGE PLACEHOLDER
-            Container(
+        Container(
             height: 180,
             width: double.infinity,
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(16),
             ),
             child: ClipRRect(
-                borderRadius: BorderRadius.circular(16),
-                child: Image.network(
-                'https://cdn.uc.assets.prezly.com/26bcc88a-0478-40a1-8f29-cf52ef86196c/nitro_v15_special_angle_2.png',
-                fit: BoxFit.cover,
-                ),
+              borderRadius: BorderRadius.circular(16),
+              child: widget.imagePath != null
+                  ? Image.asset(
+                      widget.imagePath!,
+                      fit: BoxFit.cover,
+                    )
+                  : Image.network(
+                      'https://cdn.uc.assets.prezly.com/26bcc88a-0478-40a1-8f29-cf52ef86196c/nitro_v15_special_angle_2.png',
+                      fit: BoxFit.cover,
+                    ),
             ),
-            ),
+          ),
 
             const SizedBox(height: 16),
 
