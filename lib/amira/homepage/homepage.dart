@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '/raden/edit_listing.dart';
 
 void main() {
   runApp(const MyApp());
@@ -190,20 +191,48 @@ class ItemCardList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: const [
-        ItemCard(
+      children: [
+        const ItemCard(
           name: "Lenovo Ideapad 3",
           price: "RM 8/day",
           available: true,
           duration: "Up to 60 days",
         ),
-        SizedBox(height: 20),
-        ItemCard(
+        const SizedBox(height: 20),
+        const ItemCard(
           name: "Acer Nitro V15",
           price: "RM 10/day",
           available: false,
           duration: "Up to 60 days",
         ),
+
+TextButton(
+  onPressed: () {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const EditListing(
+          name: "Acer Nitro V15",
+          price: "RM 10/day",
+          available: false,
+          duration: "Up to 60 days",
+          condition: "Rarely used",
+          description:
+          "This is the Acer Nitro V15, it’s Acer’s entry-level 15-inch gaming laptop, and it’s targeted towards gamers who are looking for the best specs without breaking the bank. In fact, it’s cheaper than the famous Helios 300 lineup and it competes directly with the MSI Bravo 15 and the Dell G5 15 SE.",
+          category: "Laptop",
+        ),
+      ),
+    );
+  },
+  child: const Text(
+    ' Edit ',
+    style: TextStyle(
+      color: Colors.blue,
+      fontSize: 14,
+    ),
+  ),
+),
+
       ],
     );
   }
