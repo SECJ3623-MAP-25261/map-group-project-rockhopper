@@ -83,7 +83,11 @@ class HomePage extends StatelessWidget {
           // App Title
           const Center(
             child: Text(
+<<<<<<< Updated upstream
               "PT",
+=======
+              "PinjamTech",
+>>>>>>> Stashed changes
               style: TextStyle(
                 fontSize: 26,
                 fontWeight: FontWeight.bold,
@@ -159,11 +163,19 @@ class CategoryCircleSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+<<<<<<< Updated upstream
         const Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
               "HI",
+=======
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: const [
+            Text(
+              "what do you want to rent?",
+>>>>>>> Stashed changes
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
             ),
             Text("View all"),
@@ -176,7 +188,7 @@ class CategoryCircleSection extends StatelessWidget {
             circleItem("Tablets"),
             circleItem("Laptops"),
             circleItem("Phones"),
-            circleItem("camera"),
+            circleItem("xR/VR Box"),
           ],
         ),
       ],
