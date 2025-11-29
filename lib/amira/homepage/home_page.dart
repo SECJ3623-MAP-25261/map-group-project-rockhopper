@@ -1,95 +1,135 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:pinjamtech_app/amira/profile.dart';
+import 'package:pinjamtech_app/muzhaffar/role_switch_bottom_sheet.dart'; // import your role switch sheet
+import 'package:pinjamtech_app/amira/createlist.dart';
+void main() {
+  runApp(const MyApp());
+}
 
-class HomePage extends StatelessWidget {
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: HomePage(),
+    );
+  }
+}
+
+// ---------------------- HOME PAGE ----------------------
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: ListView(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-              children: const [
-                UserInfo(),
-                SizedBox(height: 10),
-                SearchDevice(),
-                DeviceAds(),
-                SizedBox(height: 20),
-                CategorySection(),
-                CategoryItems(),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  State<HomePage> createState() => _HomePageState();
 }
 
-// ==========================================================
-//                        USER INFO
-// ==========================================================
+class _HomePageState extends State<HomePage> {
+  int currentIndex = 0;
+  String currentRole = 'renter';
 
-class UserInfo extends StatelessWidget {
-  const UserInfo({super.key});
+  final Map<String, Map<String, dynamic>> roleData = {
+    'renter': {'name': 'Renter', 'color': Colors.blue},
+    'rentee': {'name': 'Rentee', 'color': Colors.green},
+  };
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      contentPadding: EdgeInsets.zero,
-      title: const Padding(
-        padding: EdgeInsets.only(bottom: 7),
-        child: Text("Hello!"),
-      ),
-      subtitle: Text(
-        "Jaafar",
-        style: Theme.of(context).textTheme.headlineSmall!.copyWith(
-              fontWeight: FontWeight.w700,
-            ),
-      ),
-      trailing: Stack(
-        alignment: Alignment.topRight,
-        children: [
-          Container(
-            height: 48,
-            width: 48,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(18),
-              image: const DecorationImage(
-                image: AssetImage(AppStyle.profile),
-                fit: BoxFit.cover,
-              ),
-            ),
+    // Dynamically select pages based on role
+    final List<Widget> pages = [
+      const HomeContent(),
+      const CreateList(),
+      const ProfilePage(),
+    ];
+
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: pages[currentIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: currentIndex,
+        onTap: (index) {
+          if (index == 2) {
+            // Profile icon tapped normally
+            setState(() => currentIndex = index);
+          } else {
+            setState(() => currentIndex = index);
+          }
+        },
+        items: [
+          const BottomNavigationBarItem(
+            icon: Icon(Icons.home, size: 28),
+            label: "Home",
           ),
-          Container(
-            height: 18,
-            width: 18,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.blue,
-              border: Border.all(
-                color: Colors.white,
-                width: 3,
-              ),
+          const BottomNavigationBarItem(
+            icon: Icon(Icons.add_circle, size: 28),
+            label: "Rent",
+          ),
+          BottomNavigationBarItem(
+            icon: GestureDetector(
+              onLongPress: () {
+                // Show role switch sheet on long press
+                showModalBottomSheet(
+                  context: context,
+                  builder: (context) => RoleSwitchBottomSheet(
+                    currentRole: currentRole,
+                    roleData: roleData,
+                    onSwitchRole: (newRole) {
+                      setState(() {
+                        currentRole = newRole;
+                        currentIndex = 0; // switch to home content after role change
+                      });
+                      Navigator.pop(context);
+                    },
+                  ),
+                );
+              },
+              child: const Icon(Icons.person, size: 28),
             ),
+            label: "Profile",
           ),
         ],
+        backgroundColor: Colors.blueAccent,
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.white70,
+        showUnselectedLabels: false,
       ),
     );
   }
 }
 
-class AppStyle {
-  static const String profile = "assets/images/profilepic.png";
+// ---------------------- HOME CONTENT ----------------------
+class HomeContent extends StatelessWidget {
+  const HomeContent({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+      children: const [
+        Center(
+          child: Text(
+            "PinjamTech",
+            style: TextStyle(
+              fontSize: 26,
+              fontWeight: FontWeight.bold,
+              color: Colors.blue,
+            ),
+          ),
+        ),
+        SizedBox(height: 20),
+        SearchDevice(),
+        SizedBox(height: 20),
+        CategoryCircleSection(),
+        SizedBox(height: 20),
+        ItemCardList(),
+      ],
+    );
+  }
 }
 
-// ==========================================================
-//                       SEARCH BAR
-// ==========================================================
-
+// ---------------------- SEARCH BAR ----------------------
 class SearchDevice extends StatelessWidget {
   const SearchDevice({super.key});
 
@@ -97,199 +137,158 @@ class SearchDevice extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextField(
       decoration: InputDecoration(
-        hintText: "Search Device",
+        hintText: "Search Devices",
         filled: true,
         fillColor: Colors.grey[200],
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide.none,
         ),
-        prefixIcon: CupertinoButton(
-          padding: EdgeInsets.zero,
-          onPressed: () {},
-          child: const Icon(Icons.search),
-        ),
-        suffixIcon: CupertinoButton(
-          padding: EdgeInsets.zero,
-          onPressed: () {},
-          child: const Icon(Icons.filter_list),
-        ),
+        prefixIcon: const Icon(Icons.search),
+        suffixIcon: const Icon(Icons.chat_bubble_outline),
       ),
     );
   }
 }
 
-// ==========================================================
-//                        WIDGET HELPERS
-// ==========================================================
+// ---------------------- CATEGORY SECTION ----------------------
+class CategoryCircleSection extends StatelessWidget {
+  const CategoryCircleSection({super.key});
 
-Widget _adImage(String path) {
-  return Container(
-    margin: const EdgeInsets.only(right: 12),
-    child: ClipRRect(
-      borderRadius: BorderRadius.circular(16),
-      child: Image.asset(
-        path,
-        width: 250,
-        height: 160,
-        fit: BoxFit.cover,
-      ),
-    ),
-  );
-}
-
-Widget _rentalOption(IconData icon, String label) {
-  return Column(
-    mainAxisSize: MainAxisSize.min,
-    children: [
-      CircleAvatar(
-        radius: 30,
-        backgroundColor: Colors.blue[100],
-        child: Icon(icon, size: 30, color: Colors.blue),
-      ),
-      const SizedBox(height: 8),
-      Text(label),
-    ],
-  );
-}
-
-// ==========================================================
-//                        DEVICE ADS
-// ==========================================================
-
-class DeviceAds extends StatelessWidget {
-  const DeviceAds({super.key});
+  Widget circleItem(String text) {
+    return Column(
+      children: [
+        CircleAvatar(
+          radius: 28,
+          backgroundColor: Colors.grey[300],
+        ),
+        const SizedBox(height: 8),
+        Text(text, style: const TextStyle(fontSize: 12)),
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(
-          height: 160,
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: [
-                _adImage("assets/images/rent.jpg"),
-                _adImage("assets/images/vrheadset.jpg"),
-                _adImage("assets/images/phone2.jpg"),
-                _adImage("assets/images/gaminglaptop.png"),
-                _adImage("assets/images/device1.jpg"),
-                _adImage("assets/images/device2.png"),
-                _adImage("assets/images/device3.png"),
-                _adImage("assets/images/device4.png"),
-              ],
+        const Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              "Hi Amira 👋",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
             ),
-          ),
-        ),
-
-        const Padding(
-          padding: EdgeInsets.only(top: 20, left: 16),
-          child: Text(
-            "What do you want to rent?",
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
+            Text(
+              "View all",
+              style: TextStyle(
+                color: Colors.blue,
+                fontWeight: FontWeight.w500,
+              ),
             ),
-          ),
+          ],
         ),
-
-        const SizedBox(height: 10),
-
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Wrap(
-            spacing: 40,
-            runSpacing: 20,
-            children: [
-              _rentalOption(Icons.phone_android, "Phones"),
-              _rentalOption(Icons.laptop_mac, "Laptops"),
-              _rentalOption(Icons.tablet_mac, "Tablets"),
-              _rentalOption(Icons.watch, "Watches"),
-              _rentalOption(Icons.vrpano, "VR Headsets"),
-            ],
-          ),
+        const SizedBox(height: 15),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            circleItem("Tablets"),
+            circleItem("Laptops"),
+            circleItem("Phones"),
+            circleItem("XR/VR"),
+          ],
         ),
       ],
     );
   }
 }
 
-// ==========================================================
-//                       CATEGORY SECTION
-// ==========================================================
-
-class CategorySection extends StatelessWidget {
-  const CategorySection({super.key});
+// ---------------------- ITEM CARD LIST ----------------------
+class ItemCardList extends StatelessWidget {
+  const ItemCardList({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 30),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: const [
-          Text(
-            "Categories",
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          Text(
-            "See All",
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.blue,
-            ),
-          ),
-        ],
-      ),
+    return Column(
+      children: const [
+        ItemCard(
+          name: "Lenovo Ideapad 3",
+          price: "RM 8/day",
+          available: true,
+          duration: "Up to 60 days",
+        ),
+        SizedBox(height: 20),
+        ItemCard(
+          name: "Acer Nitro V15",
+          price: "RM 10/day",
+          available: false,
+          duration: "Up to 60 days",
+        ),
+      ],
     );
   }
 }
 
-// ==========================================================
-//                       CATEGORY ITEMS
-// ==========================================================
+// ---------------------- ITEM CARD ----------------------
+class ItemCard extends StatelessWidget {
+  final String name;
+  final String price;
+  final bool available;
+  final String duration;
 
-class CategoryItems extends StatelessWidget {
-  const CategoryItems({super.key});
+  const ItemCard({
+    super.key,
+    required this.name,
+    required this.price,
+    required this.available,
+    required this.duration,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 20, bottom: 20),
-      child: SizedBox(
-        height: 100,
-        child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: Colors.black26),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            height: 140,
+            decoration: BoxDecoration(
+              color: Colors.blue[200],
+              borderRadius: BorderRadius.circular(20),
+            ),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            name,
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+          ),
+          const SizedBox(height: 5),
+          Text(price),
+          Row(
             children: [
-              _categoryItem(Icons.phone_android, "Phones"),
-              _categoryItem(Icons.laptop_mac, "Laptops"),
-              _categoryItem(Icons.tablet_mac, "Tablets"),
-              _categoryItem(Icons.watch, "Watches"),
+              Icon(
+                Icons.circle,
+                size: 12,
+                color: available ? Colors.green : Colors.red,
+              ),
+              const SizedBox(width: 6),
+              Text(available ? "Available" : "Not Available"),
             ],
           ),
-        ),
-      ),
-    );
-  }
-
-  static Widget _categoryItem(IconData icon, String label) {
-    return Container(
-      margin: const EdgeInsets.only(right: 16),
-      child: Column(
-        children: [
-          CircleAvatar(
-            radius: 30,
-            backgroundColor: Colors.blue[100],
-            child: Icon(icon, size: 30, color: Colors.blue),
+          const SizedBox(height: 4),
+          Row(
+            children: [
+              const Icon(Icons.timer, size: 14, color: Colors.orange),
+              const SizedBox(width: 6),
+              Text(duration),
+            ],
           ),
-          const SizedBox(height: 8),
-          Text(label),
         ],
       ),
     );
