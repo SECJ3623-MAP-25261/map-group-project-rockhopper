@@ -83,15 +83,13 @@ class HomePage extends StatelessWidget {
           // App Title
           const Center(
             child: Text(
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
+
               "PT",
-=======
+
               "PinjamTech",
->>>>>>> Stashed changes
-=======
+
               "PinjamTech",
->>>>>>> Stashed changes
+
               style: TextStyle(
                 fontSize: 26,
                 fontWeight: FontWeight.bold,
@@ -167,23 +165,19 @@ class CategoryCircleSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
+
         const Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
               "HI",
-=======
-=======
->>>>>>> Stashed changes
+
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: const [
             Text(
               "what do you want to rent?",
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
+
 =======
 >>>>>>> Stashed changes
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
