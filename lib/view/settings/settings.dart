@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'edit_profile.dart' show EditProfile;
-import 'payment_method.dart';
+import '../profile/edit_profile.dart' show EditProfile;
+import '../payment/payment_method.dart';
 class SettingsPage extends StatefulWidget{
     const SettingsPage({super.key});
 

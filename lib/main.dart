@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'harresh/welcome_screen.dart';
+import 'view/auth/welcome_screen.dart';
 
 void main() {
   runApp(const PinjamTechApp());

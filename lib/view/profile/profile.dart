@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'component.dart' show MyTextBox;
-import 'settings.dart';
-import 'my_favorite.dart';
+import '../home/components/component.dart' show MyTextBox;
+import '../settings/settings.dart'; 
+import '../home/my_favorite.dart';
 
 
 class ProfilePage extends StatelessWidget {

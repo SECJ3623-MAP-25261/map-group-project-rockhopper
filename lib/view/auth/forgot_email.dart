@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../harresh/otp_verification_screen.dart';
+import 'otp_verification_screen.dart';
 
 class ForgotEmailScreen extends StatefulWidget {
   const ForgotEmailScreen({super.key});

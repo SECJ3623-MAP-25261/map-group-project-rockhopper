@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'otp_verification_screen.dart';
-import '../raden/forgot_password.dart';
-import '../raden/forgot_email.dart';
-import '../amira/homepage/home_page.dart';
+import 'forgot_password.dart';
+import 'forgot_email.dart';
+import '../home/home_roles/renter_home.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);

@@ -1,7 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:pinjamtech_app/amira/profile.dart';
-import 'package:pinjamtech_app/muzhaffar/role_switch_bottom_sheet.dart'; // import your role switch sheet
-import 'package:pinjamtech_app/amira/createlist.dart';
+/*import 'package:flutter/material.dart';
+import '../profile/profile.dart';
+import 'home_roles/role_switch_bottom_sheet.dart'; // import your role switch sheet
+import '../listings/createlist.dart';
+import 'search_screen.dart';
 void main() {
   runApp(const MyApp());
 }
@@ -128,24 +129,45 @@ class HomeContent extends StatelessWidget {
     );
   }
 }
-
-// ---------------------- SEARCH BAR ----------------------
 class SearchDevice extends StatelessWidget {
   const SearchDevice({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      decoration: InputDecoration(
-        hintText: "Search Devices",
-        filled: true,
-        fillColor: Colors.grey[200],
-        border: OutlineInputBorder(
+    return GestureDetector(
+      onTap: () {
+        print("Search field tapped"); // Debug print
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const SearchScreen()),
+        );
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.grey[200],
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide.none,
         ),
-        prefixIcon: const Icon(Icons.search),
-        suffixIcon: const Icon(Icons.chat_bubble_outline),
+        child: const Row(
+          children: [
+            Padding(
+              padding: EdgeInsets.only(left: 16.0, right: 12.0),
+              child: Icon(Icons.search, color: Colors.grey),
+            ),
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 16.0),
+                child: Text(
+                  "Search Devices",
+                  style: TextStyle(color: Colors.grey),
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(right: 16.0),
+              child: Icon(Icons.chat_bubble_outline, color: Colors.grey),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -294,3 +316,4 @@ class ItemCard extends StatelessWidget {
     );
   }
 }
+*/
