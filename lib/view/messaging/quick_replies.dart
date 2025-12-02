@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 
 class QuickReplies extends StatelessWidget {
-  final Function(String) onReplySelected;
+  final Function(String, int) onReplySelected;
+  final Set<int> usedReplies;
 
-  const QuickReplies({super.key, required this.onReplySelected});
+  const QuickReplies({
+    super.key,
+    required this.onReplySelected,
+    this.usedReplies = const {},
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -21,19 +26,26 @@ class QuickReplies extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            "What would you like to ask? Try these:",
-            style: TextStyle(
-              color: Colors.grey.shade700,
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-            ),
+          Row(
+            children: [
+              Icon(Icons.lightbulb_outline, 
+                   color: Colors.blue.shade700, size: 16),
+              const SizedBox(width: 6),
+              Text(
+                "Quick questions to ask",
+                style: TextStyle(
+                  color: Colors.blue.shade800,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 8),
           
-          // Horizontal scrollable list
+          // Horizontal scrollable list - ALL replies always visible
           SizedBox(
-            height: 50, // Fixed height for horizontal list
+            height: 50,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               itemCount: replies.length,
@@ -43,7 +55,7 @@ class QuickReplies extends StatelessWidget {
                     right: index < replies.length - 1 ? 8 : 0,
                   ),
                   child: ElevatedButton(
-                    onPressed: () => onReplySelected(replies[index]),
+                    onPressed: () => onReplySelected(replies[index], index),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
                       foregroundColor: Colors.black,

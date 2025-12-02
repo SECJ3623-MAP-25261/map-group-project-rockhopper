@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'chat_bubble.dart';
-import 'package:pinjamtech_app/view/messaging/rentee_quick_replies.dart';
+import 'rentee_quick_replies.dart';
 import 'message_input.dart';
 
 class RenterChatScreen extends StatefulWidget {
@@ -24,7 +24,7 @@ class RenterChatScreen extends StatefulWidget {
 class _RenterChatScreenState extends State<RenterChatScreen> {
   late List<Map<String, dynamic>> messages;
   final TextEditingController _controller = TextEditingController();
-  bool showQuickReplies = true;
+  Set<int> usedQuickReplies = {}; // Track which quick replies have been used
 
   @override
   void initState() {
@@ -51,16 +51,15 @@ class _RenterChatScreenState extends State<RenterChatScreen> {
         "time": _formatTime(DateTime.now()),
         "senderName": "You",
       });
-      showQuickReplies = false;
     });
 
     _controller.clear();
   }
 
-  void sendQuickReply(String text) {
+  void sendQuickReply(String text, int index) {
     sendMessage(text);
     setState(() {
-      showQuickReplies = false;
+      usedQuickReplies.add(index); // Mark this quick reply as used
     });
   }
 
@@ -72,7 +71,6 @@ class _RenterChatScreenState extends State<RenterChatScreen> {
         "time": _formatTime(DateTime.now()),
         "senderName": "You",
       });
-      showQuickReplies = false;
     });
   }
 
@@ -274,12 +272,12 @@ class _RenterChatScreenState extends State<RenterChatScreen> {
                   ),
           ),
           
-          // Quick Replies Section (Lender's answers)
-          if (showQuickReplies)
-            RenterQuickReplies(
-              onReplySelected: sendQuickReply,
-              itemPrice: widget.itemPrice,
-            ),
+          // Quick Replies Section 
+          RenterQuickReplies(
+            onReplySelected: sendQuickReply,
+            itemPrice: widget.itemPrice,
+            usedReplies: usedQuickReplies,
+          ),
           
           // Message Input
           MessageInput(

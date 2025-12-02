@@ -1,46 +1,57 @@
 import 'package:flutter/material.dart';
 import 'package:pinjamtech_app/view/messaging/rentee_chat_screen.dart';
 
-class RenterChatListScreen extends StatelessWidget {
+class RenterChatListScreen extends StatefulWidget {
   const RenterChatListScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final List<Map<String, dynamic>> chats = [
-      {
-        "item": "MacBook Air M4 2024",
-        "username": "Anonym123",
-        "time": "13:13",
-        "inquiry": "Is this still available?",
-        "itemPrice": "RM 17/day",
-        "unread": 2,
-      },
-      {
-        "item": "ASUS ROG Zephyrus G14",
-        "username": "JohnDoe",
-        "time": "11:34",
-        "inquiry": "Can we negotiate the price?",
-        "itemPrice": "RM 25/day",
-        "unread": 0,
-      },
-      {
-        "item": "Canon M50 Camera",
-        "username": "JaneSmith",
-        "time": "10:43",
-        "inquiry": "Where can we meet?",
-        "itemPrice": "RM 15/day",
-        "unread": 1,
-      },
-      {
-        "item": "iPhone 15 Pro",
-        "username": "MikeChen",
-        "time": "08:17",
-        "inquiry": "Any scratches?",
-        "itemPrice": "RM 12/day",
-        "unread": 0,
-      },
-    ];
+  State<RenterChatListScreen> createState() => _RenterChatListScreenState();
+}
 
+class _RenterChatListScreenState extends State<RenterChatListScreen> {
+  List<Map<String, dynamic>> chats = [
+    {
+      "item": "MacBook Air M4 2024",
+      "username": "Anonym123",
+      "time": "13:13",
+      "inquiry": "Is this still available?",
+      "itemPrice": "RM 17/day",
+      "unread": 2,
+    },
+    {
+      "item": "ASUS ROG Zephyrus G14",
+      "username": "JohnDoe",
+      "time": "11:34",
+      "inquiry": "Can we negotiate the price?",
+      "itemPrice": "RM 25/day",
+      "unread": 0,
+    },
+    {
+      "item": "Canon M50 Camera",
+      "username": "JaneSmith",
+      "time": "10:43",
+      "inquiry": "Where can we meet?",
+      "itemPrice": "RM 15/day",
+      "unread": 1,
+    },
+    {
+      "item": "iPhone 15 Pro",
+      "username": "MikeChen",
+      "time": "08:17",
+      "inquiry": "Any scratches?",
+      "itemPrice": "RM 12/day",
+      "unread": 0,
+    },
+  ];
+
+  void _markAsRead(int index) {
+    setState(() {
+      chats[index]["unread"] = 0; // Clear unread count
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Inquiries"),
@@ -62,17 +73,20 @@ class RenterChatListScreen extends StatelessWidget {
           final int unread = chat["unread"] as int;
           
           return InkWell(
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => RenterChatScreen(
-                  chatName: username,
-                  itemName: item,
-                  itemPrice: itemPrice,
-                  initialInquiry: inquiry,
+            onTap: () {
+              _markAsRead(i); // Clear unread count before navigation
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => RenterChatScreen(
+                    chatName: username,
+                    itemName: item,
+                    itemPrice: itemPrice,
+                    initialInquiry: inquiry,
+                  ),
                 ),
-              ),
-            ),
+              );
+            },
             child: Container(
               color: Colors.white,
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -115,7 +129,7 @@ class RenterChatListScreen extends StatelessWidget {
                                 width: 20,
                                 height: 20,
                                 decoration: const BoxDecoration(
-                                  color: Colors.green,
+                                  color: Colors.red,
                                   shape: BoxShape.circle,
                                 ),
                                 child: Center(

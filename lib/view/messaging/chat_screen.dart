@@ -24,7 +24,7 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   late List<Map<String, dynamic>> messages;
   final TextEditingController _controller = TextEditingController();
-  bool showQuickReplies = true;
+  Set<int> usedQuickReplies = {}; // Track which quick replies have been used
 
   @override
   void initState() {
@@ -44,30 +44,15 @@ class _ChatScreenState extends State<ChatScreen> {
         "time": _formatTime(DateTime.now()),
         "senderName": "You",
       });
-      showQuickReplies = false;
-    });
-
-    // Auto-reply from owner after 1.5 seconds
-    Future.delayed(const Duration(milliseconds: 1500), () {
-      if (mounted) {
-        setState(() {
-          messages.add({
-            "fromMe": false,
-            "text": _getAutoReply(text),
-            "time": _formatTime(DateTime.now()),
-            "senderName": widget.chatName,
-          });
-        });
-      }
     });
 
     _controller.clear();
   }
 
-  void sendQuickReply(String text) {
+  void sendQuickReply(String text, int index) {
     sendMessage(text);
     setState(() {
-      showQuickReplies = false;
+      usedQuickReplies.add(index); // Mark this quick reply as used
     });
   }
 
@@ -79,7 +64,6 @@ class _ChatScreenState extends State<ChatScreen> {
         "time": _formatTime(DateTime.now()),
         "senderName": "You",
       });
-      showQuickReplies = false;
     });
   }
 
@@ -98,25 +82,6 @@ class _ChatScreenState extends State<ChatScreen> {
     final hour = time.hour % 12 == 0 ? 12 : time.hour % 12;
     final period = time.hour < 12 ? 'AM' : 'PM';
     return "$hour:${time.minute.toString().padLeft(2, '0')} $period";
-  }
-
-  String _getAutoReply(String userMessage) {
-    if (userMessage.toLowerCase().contains("price") || 
-        userMessage.toLowerCase().contains("cost")) {
-      return "The price is RM 17/day as listed.";
-    } else if (userMessage.toLowerCase().contains("meet") ||
-               userMessage.toLowerCase().contains("location")) {
-      return "I can meet at KLCC or Mid Valley.";
-    } else if (userMessage.toLowerCase().contains("available") ||
-               userMessage.toLowerCase().contains("still")) {
-      return "Yes, it's available!";
-    } else if (userMessage.toLowerCase().contains("defect")) {
-      return "No defects, it's in perfect condition.";
-    } else if (userMessage.toLowerCase().contains("installment")) {
-      return "Sorry, I don't accept installments.";
-    } else {
-      return "Thanks for your message!";
-    }
   }
 
   @override
@@ -278,11 +243,11 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
           ),
           
-          // Quick Questions Section (From your image)
-          if (showQuickReplies)
-            QuickReplies(
-              onReplySelected: sendQuickReply,
-            ),
+          // Quick Questions Section 
+          QuickReplies(
+            onReplySelected: sendQuickReply,
+            usedReplies: usedQuickReplies,
+          ),
           
           // Message Input
           MessageInput(

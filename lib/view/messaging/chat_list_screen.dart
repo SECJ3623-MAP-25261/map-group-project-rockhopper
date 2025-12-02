@@ -1,34 +1,49 @@
 import 'package:flutter/material.dart';
 import 'chat_screen.dart';
 
-class ChatListScreen extends StatelessWidget {
+class ChatListScreen extends StatefulWidget {
   const ChatListScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final List<Map<String, dynamic>> chats = [
-      {
-        "item": "MacBook Air M4 2024",
-        "username": "Anonym123",
-        "time": "13:13",
-      },
-      {
-        "item": "ASUS ROG Zephyrus G14",
-        "username": "Anonym123",
-        "time": "11:34",
-      },
-      {
-        "item": "Lenovo Ideapad 3i",
-        "username": "Abc321",
-        "time": "10:43",
-      },
-      {
-        "item": "Camera", // Since your image shows "Moname234 @Rentee" without item name
-        "username": "Moname234 @Rentee",
-        "time": "08:17",
-      },
-    ];
+  State<ChatListScreen> createState() => _ChatListScreenState();
+}
 
+class _ChatListScreenState extends State<ChatListScreen> {
+  List<Map<String, dynamic>> chats = [
+    {
+      "item": "MacBook Air M4 2024",
+      "username": "Anonym123",
+      "time": "13:13",
+      "unread": 2,
+    },
+    {
+      "item": "ASUS ROG Zephyrus G14",
+      "username": "Anonym123",
+      "time": "11:34",
+      "unread": 0,
+    },
+    {
+      "item": "Lenovo Ideapad 3i",
+      "username": "Abc321",
+      "time": "10:43",
+      "unread": 1,
+    },
+    {
+      "item": "Camera",
+      "username": "Moname234 @Rentee",
+      "time": "08:17",
+      "unread": 0,
+    },
+  ];
+
+  void _markAsRead(int index) {
+    setState(() {
+      chats[index]["unread"] = 0; // Clear unread count
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Chat"),
@@ -45,19 +60,23 @@ class ChatListScreen extends StatelessWidget {
           final String item = chat["item"] as String;
           final String username = chat["username"] as String;
           final String time = chat["time"] as String;
+          final int unread = chat["unread"] as int;
           
           return InkWell(
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => ChatScreen(
-                  chatName: username.replaceAll(" @Rentee", ""),
-                  itemName: item,
-                  itemPrice: "\$20/day",
-                  isRenter: true,
+            onTap: () {
+              _markAsRead(i); // Clear unread count before navigation
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => ChatScreen(
+                    chatName: username.replaceAll(" @Rentee", ""),
+                    itemName: item,
+                    itemPrice: "\$20/day",
+                    isRenter: true,
+                  ),
                 ),
-              ),
-            ),
+              );
+            },
             child: Container(
               color: Colors.white,
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -103,13 +122,38 @@ class ChatListScreen extends StatelessWidget {
                     ),
                   ),
                   
-                  // Time
-                  Text(
-                    time,
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey.shade600,
-                    ),
+                  // Time and Unread Badge
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        time,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey.shade600,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      if (unread > 0)
+                        Container(
+                          width: 20,
+                          height: 20,
+                          decoration: const BoxDecoration(
+                            color: Colors.red,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Center(
+                            child: Text(
+                              unread.toString(),
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                    ],
                   ),
                 ],
               ),

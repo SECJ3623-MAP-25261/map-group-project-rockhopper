@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 
 class RenterQuickReplies extends StatelessWidget {
-  final Function(String) onReplySelected;
+  final Function(String, int) onReplySelected;
   final String itemPrice;
+  final Set<int> usedReplies;
 
   const RenterQuickReplies({
     super.key,
     required this.onReplySelected,
     required this.itemPrice,
+    this.usedReplies = const {},
   });
 
   @override
@@ -46,7 +48,7 @@ class RenterQuickReplies extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           
-          // Horizontal scrollable list
+          // Horizontal scrollable list - ALL replies always visible
           SizedBox(
             height: 50,
             child: ListView.builder(
@@ -58,7 +60,7 @@ class RenterQuickReplies extends StatelessWidget {
                     right: index < replies.length - 1 ? 8 : 0,
                   ),
                   child: ElevatedButton(
-                    onPressed: () => onReplySelected(replies[index]),
+                    onPressed: () => onReplySelected(replies[index], index),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
                       foregroundColor: Colors.green.shade800,
