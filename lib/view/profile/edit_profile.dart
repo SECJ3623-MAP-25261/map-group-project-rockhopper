@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../profile/profile.dart';
 
 class EditProfile extends StatelessWidget {
   const EditProfile({super.key});
@@ -21,101 +22,66 @@ class EditProfile extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            // First name + Last name (same row)
             Row(
               children: [
                 Expanded(
-                  child: TextFormField(
+                  child: CustomTextField(
                     controller: firstNameController,
-                    decoration: const InputDecoration(
-                      labelText: 'First Name',
-                      border: UnderlineInputBorder(),
-                    ),
+                    labelText: 'First Name',
                   ),
                 ),
                 const SizedBox(width: 16),
                 Expanded(
-                  child: TextFormField(
+                  child: CustomTextField(
                     controller: lastNameController,
-                    decoration: const InputDecoration(
-                      labelText: 'Last Name',
-                      border: UnderlineInputBorder(),
-                    ),
+                    labelText: 'Last Name',
                   ),
                 ),
               ],
             ),
-
             const SizedBox(height: 16),
-
-            // Username
-            TextFormField(
-              controller: usernameController,
-              decoration: const InputDecoration(
-                labelText: 'Username',
-                border: UnderlineInputBorder(),
-              ),
-            ),
-
+            CustomTextField(controller: usernameController, labelText: 'Username'),
             const SizedBox(height: 16),
-
-            // Email
-            TextFormField(
-              controller: emailController,
-              decoration: const InputDecoration(
-                labelText: 'Email',
-                border: UnderlineInputBorder(),
-              ),
-            ),
-
+            CustomTextField(controller: emailController, labelText: 'Email'),
             const SizedBox(height: 16),
-
-            // Gender + Phone (same row)
             Row(
               children: [
                 Expanded(
-                  child: TextFormField(
-                    controller: genderController,
-                    decoration: const InputDecoration(
-                      labelText: 'Gender',
-                      border: UnderlineInputBorder(),
-                    ),
-                  ),
+                  child: CustomTextField(controller: genderController, labelText: 'Gender'),
                 ),
                 const SizedBox(width: 16),
                 Expanded(
-                  child: TextFormField(
-                    controller: phoneController,
-                    decoration: const InputDecoration(
-                      labelText: 'Phone Number',
-                      border: UnderlineInputBorder(),
-                    ),
-                  ),
+                  child: CustomTextField(controller: phoneController, labelText: 'Phone'),
                 ),
               ],
             ),
-
             const SizedBox(height: 24),
-
-            // Done button
             Center(
               child: ElevatedButton(
                 onPressed: () {
-                  print('First Name: ${firstNameController.text}');
-                  print('Last Name: ${lastNameController.text}');
-                  print('Username: ${usernameController.text}');
-                  print('Email: ${emailController.text}');
-                  print('Gender: ${genderController.text}');
-                  print('Phone: ${phoneController.text}');
-
+                  // Show snackbar
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Profile updated!')),
+                  );
+
+                  // Navigate to ProfilePage
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => ProfilePage(
+                        firstName: firstNameController.text,
+                        lastName: lastNameController.text,
+                        username: usernameController.text,
+                        email: emailController.text,
+                        gender: genderController.text,
+                        phone: phoneController.text,
+                      ),
+                    ),
                   );
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blueGrey[300],
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 40, vertical: 12),
+                  padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),

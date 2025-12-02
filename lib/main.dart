@@ -1,22 +1,23 @@
 import 'package:flutter/material.dart';
+import 'view/home/home_roles/rentee_home.dart';
+import 'view/home/home_roles/renter_home.dart';
 import 'view/auth/welcome_screen.dart';
 
 void main() {
-  runApp(const PinjamTechApp());
+  runApp(const MyApp());
 }
 
-class PinjamTechApp extends StatelessWidget {
-  const PinjamTechApp({Key? key}) : super(key: key);
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'PinjamTech',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const WelcomeScreen(),
       debugShowCheckedModeBanner: false,
+      title: "PinjamTech",
+      theme: ThemeData(primarySwatch: Colors.blue),
+      home: const WelcomeScreen(),
     );
   }
 }
+

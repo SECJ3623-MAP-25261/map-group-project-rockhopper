@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'otp_verification_screen.dart';
 import 'forgot_password.dart';
 import 'forgot_email.dart';
-import '../home/home_roles/renter_home.dart';
+//import '../home/home_roles/renter_home.dart';
+import '../home/preferences.dart';
+
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -176,7 +178,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const HomePage(),
+                          builder: (context) => const PreferencesScreen(),
                         ),
                       );
                     },
