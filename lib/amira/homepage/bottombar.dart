@@ -1,62 +1,118 @@
+// bottom_bar.dart (Amira folder) with role-switch integration
 import 'package:flutter/material.dart';
-//import 'package:flutter/widgets.dart';
-import 'homepage.dart';
+import '../homepage/home_page.dart';
+import '../../muzhaffar/rentee_home.dart';
+import '../../muzhaffar/role_switch_bottom_sheet.dart';
 
-class BottomBar extends StatefulWidget{
+class BottomBar extends StatefulWidget {
   const BottomBar({super.key});
 
   @override
   State<BottomBar> createState() => _BottomBarState();
-
 }
 
-class _BottomBarState extends State<BottomBar>{
+class _BottomBarState extends State<BottomBar> {
   int _selectedIndex = 0;
 
-  static const List<Widget> _widgetOptions = <Widget>[
-    HomePage(),
-    Text('Index 1: business'),
-    Text('Index 1: School'),
-    Text('Index 1: School'),
+  // Default role is renter
+  String _currentRole = 'renter';
 
-  ];
+  final Map<String, Map<String, dynamic>> _roleData = {
+    'renter': {
+      'name': 'Renter',
+      'color': Colors.blue,
+    },
+    'rentee': {
+      'name': 'Rentee',
+      'color': Colors.green,
+    },
+  };
 
-  void _onItemTapped(int index){
-    setState((){
+  // Show bottom sheet to switch roles
+  void _switchRole(String newRole) {
+    setState(() {
+      _currentRole = newRole;
+    });
+    Navigator.of(context).pop();
+  }
+
+  void _showRoleSwitchSheet() {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (context) {
+        return RoleSwitchBottomSheet(
+          currentRole: _currentRole,
+          roleData: _roleData,
+          onSwitchRole: _switchRole,
+        );
+      },
+    );
+  }
+
+  void _onItemTapped(int index) {
+    setState(() {
       _selectedIndex = index;
     });
   }
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
+        child: _buildContent(),
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
+        currentIndex: _selectedIndex,
+        selectedItemColor: _roleData[_currentRole]!['color'],
+        unselectedItemColor: Colors.grey,
+        onTap: _onItemTapped,
+        items: [
+          const BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.business),
             label: 'Business',
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.school),
             label: 'School',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Settings',
+            icon: GestureDetector(
+              onLongPress: _showRoleSwitchSheet,
+              child: CircleAvatar(
+                radius: 15,
+                backgroundColor: _roleData[_currentRole]!['color'],
+                child: Text(
+                  _currentRole == 'renter' ? 'R' : 'E',
+                  style: const TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+            label: 'Profile',
           ),
         ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.amber[800],
-        onTap: _onItemTapped,
       ),
     );
+  }
+
+  // Dynamically show content based on role
+  Widget _buildContent() {
+    if (_selectedIndex == 0) {
+      return _currentRole == 'renter'
+          ? const HomePage() // Amira’s renter homepage
+          : RenteeHomeContent(roleColor: _roleData['rentee']!['color']); // Muzhaffar’s rentee homepage
+    } else {
+      // Default placeholder for other tabs
+      return Center(child: Text('Tab $_selectedIndex'));
+    }
   }
 }

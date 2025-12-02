@@ -1,22 +1,27 @@
 import 'package:flutter/material.dart';
-import 'renter_screen.dart';
+import 'chat_list_screen.dart';
 
 void main() {
-  runApp(const PinjamTechApp());
+  runApp(const MyApp());
 }
 
-class PinjamTechApp extends StatelessWidget {
-  const PinjamTechApp({Key? key}) : super(key: key);
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'PinjamTech',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const RenterScreen(),
       debugShowCheckedModeBanner: false,
+      title: 'Renter Chat',
+      theme: ThemeData(
+        primaryColor: Colors.blue,
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.white,
+          foregroundColor: Colors.black,
+          elevation: 1,
+        ),
+      ),
+      home: const ChatListScreen(),   
     );
   }
 }
