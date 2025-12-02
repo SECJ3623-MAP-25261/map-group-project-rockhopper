@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../home/search_screen.dart';
+import 'package:pinjamtech_app/view/messaging/rentee_chat_list_screen.dart'; 
 
 class RenteeHome extends StatelessWidget {
   const RenteeHome({super.key});
@@ -11,26 +11,89 @@ class RenteeHome extends StatelessWidget {
         child: ListView(
           padding: const EdgeInsets.all(20),
           children: [
-            const Text("PinjamTech", textAlign: TextAlign.center, style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: Colors.blue)),
+            const Text(
+              "PinjamTech",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 26,
+                fontWeight: FontWeight.bold,
+                color: Colors.green, // Changed to green
+              ),
+            ),
             const SizedBox(height: 10),
-            _buildUserInfo(),
+
+            _buildUserInfo(context),
+
             const SizedBox(height: 20),
-            const SearchDevice(),
+            const Text(
+              "Rentee Dashboard",
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.green),
+            ),
+
             const SizedBox(height: 20),
-            const DeviceAds(),
-            const SizedBox(height: 20),
-            const RentalOptionsSection(),
+            const Text(
+              "My Active Rentals",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+
+            const SizedBox(height: 15),
+
+            // ACTIVE RENTALS GRID
+            GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 12,
+                mainAxisSpacing: 12,
+                childAspectRatio: 1,
+              ),
+              itemCount: 4,
+              itemBuilder: (context, index) {
+                return Container(
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: const Center(
+                    child: Icon(Icons.devices, size: 40, color: Colors.grey),
+                  ),
+                );
+              },
+            ),
+
             const SizedBox(height: 30),
-            const CategorySection(),
-            const SizedBox(height: 20),
-            const CategoryItems(),
+            const Text("Quick Actions", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 15),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                _quickActionCircle(Icons.search, "Browse"),
+                _quickActionCircle(Icons.favorite, "Favorites"),
+                _quickActionCircle(Icons.history, "History"),
+                _quickActionCircle(Icons.settings, "Settings"),
+              ],
+            ),
+
+            const SizedBox(height: 30),
+            const Text("Recent Activity", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 15),
+
+            _activityItem("Rented MacBook Pro", "2 days ago"),
+            _activityItem("Returned iPhone 15", "1 week ago"),
+            _activityItem("Rented PS5", "2 weeks ago"),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildUserInfo() {
+  // ------------------------------
+  //           USER INFO
+  // ------------------------------
+  Widget _buildUserInfo(BuildContext context) {
     return ListTile(
       contentPadding: EdgeInsets.zero,
       title: Column(
@@ -38,230 +101,128 @@ class RenteeHome extends StatelessWidget {
         children: [
           const Text("Hello!", style: TextStyle(fontSize: 14)),
           const SizedBox(height: 4),
+
           Row(
             children: [
-              const Text("Jaafar", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+              const Text("Jaafar",
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
               const SizedBox(width: 8),
+
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
-                  color: Colors.green.withOpacity(0.1),
+                  color: Colors.green.withOpacity(0.1), // Green for Rentee
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(color: Colors.green.withOpacity(0.3)),
                 ),
-                child: const Text('Rentee', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Colors.green)),
+                child: const Text(
+                  'Rentee', // Rentee role
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.green,
+                  ),
+                ),
               ),
             ],
           ),
         ],
       ),
-      subtitle: const Text("Find amazing devices to rent", style: TextStyle(fontSize: 14, color: Colors.grey)),
-      trailing: Container(
-        height: 48,
-        width: 48,
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(18), color: Colors.grey[300]),
-        child: const Icon(Icons.person, size: 30),
+
+      subtitle: const Text(
+        "Manage your rental items", // Same subtitle
+        style: TextStyle(fontSize: 14, color: Colors.grey),
       ),
-    );
-  }
-}
 
-// Include your SearchDevice, DeviceAds, RentalOptionsSection, CategorySection, CategoryItems here exactly as in your code.
-
-
-// ==========================================================
-//                       SEARCH BAR
-// ==========================================================
-class SearchDevice extends StatelessWidget {
-  const SearchDevice({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const SearchScreen(),
-          ),
-        );
-      },
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          color: Colors.grey[200],
-        ),
-        child: const IgnorePointer(
-          child: TextField(
-            decoration: InputDecoration(
-              hintText: "Search Device",
-              border: InputBorder.none,
-              prefixIcon: Icon(Icons.search),
-              suffixIcon: Icon(Icons.filter_list),
+      // CHAT + PROFILE ICONS
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // CHAT ICON
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const RenterChatListScreen()),
+              );
+            },
+            child: Container(
+              height: 48,
+              width: 48,
+              margin: const EdgeInsets.only(right: 10),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(18),
+                color: Colors.grey[300],
+              ),
+              child: const Icon(Icons.chat_bubble_outline, size: 26),
             ),
           ),
-        ),
-      ),
-    );
-  }
-}
 
-// ==========================================================
-//                        DEVICE ADS
-// ==========================================================
-class DeviceAds extends StatelessWidget {
-  const DeviceAds({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 160,
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          children: [
-            _adImage(),
-            _adImage(),
-            _adImage(),
-            _adImage(),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _adImage() {
-    return Container(
-      margin: const EdgeInsets.only(right: 12),
-      width: 250,
-      height: 160,
-      decoration: BoxDecoration(
-        color: Colors.grey[300],
-        borderRadius: BorderRadius.circular(16),
-      ),
-    );
-  }
-}
-
-// ==========================================================
-//                   RENTAL OPTIONS SECTION
-// ==========================================================
-class RentalOptionsSection extends StatelessWidget {
-  const RentalOptionsSection({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Padding(
-          padding: EdgeInsets.only(left: 4),
-          child: Text(
-            "What do you want to rent?",
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
+          // PROFILE ICON
+          Container(
+            height: 48,
+            width: 48,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(18),
+              color: Colors.grey[300],
             ),
+            child: const Icon(Icons.person, size: 30),
           ),
-        ),
-        const SizedBox(height: 15),
-        Wrap(
-          spacing: 30,
-          runSpacing: 20,
-          alignment: WrapAlignment.center,
-          children: [
-            _rentalOption(Icons.phone_android, "Phones"),
-            _rentalOption(Icons.laptop_mac, "Laptops"),
-            _rentalOption(Icons.tablet_mac, "Tablets"),
-            _rentalOption(Icons.watch, "Watches"),
-            _rentalOption(Icons.vrpano, "VR Headsets"),
-          ],
-        ),
-      ],
+        ],
+      ),
     );
   }
 
-  Widget _rentalOption(IconData icon, String label) {
+  // ------------------------------
+  //       QUICK ACTION CIRCLE
+  // ------------------------------
+  Widget _quickActionCircle(IconData icon, String label) {
     return Column(
-      mainAxisSize: MainAxisSize.min,
       children: [
-        CircleAvatar(
-          radius: 30,
-          backgroundColor: Colors.blue[100],
-          child: Icon(icon, size: 30, color: Colors.blue),
+        Container(
+          width: 50,
+          height: 50,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            border: Border.all(color: Colors.green, width: 2), // Green border
+            color: Colors.green.withOpacity(0.1), // Green background
+          ),
+          child: Icon(icon, color: Colors.green, size: 24), // Green icon
         ),
         const SizedBox(height: 8),
         Text(label, style: const TextStyle(fontSize: 12)),
       ],
     );
   }
-}
 
-// ==========================================================
-//                       CATEGORY SECTION
-// ==========================================================
-class CategorySection extends StatelessWidget {
-  const CategorySection({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          "Categories",
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        Text(
-          "See All",
-          style: TextStyle(
-            fontSize: 14,
-            color: Colors.blue,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-// ==========================================================
-//                       CATEGORY ITEMS
-// ==========================================================
-class CategoryItems extends StatelessWidget {
-  const CategoryItems({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 100,
-      child: ListView(
-        scrollDirection: Axis.horizontal,
-        children: [
-          _categoryItem(Icons.phone_android, "Phones"),
-          _categoryItem(Icons.laptop_mac, "Laptops"),
-          _categoryItem(Icons.tablet_mac, "Tablets"),
-          _categoryItem(Icons.watch, "Watches"),
-        ],
-      ),
-    );
-  }
-
-  Widget _categoryItem(IconData icon, String label) {
+  // ------------------------------
+  //        ACTIVITY ITEM
+  // ------------------------------
+  Widget _activityItem(String title, String time) {
     return Container(
-      margin: const EdgeInsets.only(right: 16),
-      child: Column(
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.grey[100],
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
         children: [
-          CircleAvatar(
-            radius: 30,
-            backgroundColor: Colors.blue[100],
-            child: Icon(icon, size: 30, color: Colors.blue),
+          const Icon(Icons.history, color: Colors.green), // Green icon
+          const SizedBox(width: 12),
+
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(title,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.w600, fontSize: 14)),
+                Text(time,
+                    style: TextStyle(fontSize: 12, color: Colors.grey[600])),
+              ],
+            ),
           ),
-          const SizedBox(height: 8),
-          Text(label, style: const TextStyle(fontSize: 12)),
         ],
       ),
     );
