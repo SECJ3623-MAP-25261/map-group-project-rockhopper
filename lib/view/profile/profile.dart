@@ -29,7 +29,7 @@ class ProfilePage extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         children: [
           const SizedBox(height: 10),
-          Center(
+          const Center(
             child: Icon(Icons.person, size: 100, color: Colors.blueGrey),
           ),
           const SizedBox(height: 10),

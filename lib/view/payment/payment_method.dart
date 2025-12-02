@@ -12,9 +12,9 @@ class PaymentApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       title: 'Payment UI',
-      home: const PaymentPage(),
+      home: PaymentPage(),
       debugShowCheckedModeBanner: false,
     );
   }
@@ -71,7 +71,7 @@ class _PaymentPageState extends State<PaymentPage> {
 
             // Pay button'
             Padding(
-  padding: EdgeInsets.only(left: 50, top: 20),
+  padding: const EdgeInsets.only(left: 50, top: 20),
            child: SizedBox(
               width: 900,
               height: 50,

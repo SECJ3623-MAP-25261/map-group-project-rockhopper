@@ -15,10 +15,10 @@ class WelcomeScreen extends StatelessWidget {
           child: Column(
             children: [
               // Header - Centered
-              Center(
+              const Center(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
+                  children: [
                     Text(
                       'Pinjam',
                       style: TextStyle(

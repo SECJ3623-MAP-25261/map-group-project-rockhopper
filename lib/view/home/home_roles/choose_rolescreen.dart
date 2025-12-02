@@ -25,7 +25,7 @@ class ChooseRoleScreen extends StatelessWidget {
   onPressed: () {
     Navigator.push(
       context, 
-      MaterialPageRoute(builder: (context) => RenterHome()),
+      MaterialPageRoute(builder: (context) => const RenterHome()),
     );
   },
   child: const Text("Renter"),
@@ -37,7 +37,7 @@ ElevatedButton(
   onPressed: () {
     Navigator.push(
       context, 
-      MaterialPageRoute(builder: (context) => RenteeHome()),
+      MaterialPageRoute(builder: (context) => const RenteeHome()),
     );
   },
   child: const Text("Rentee"),

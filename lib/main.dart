@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'view/home/home_roles/rentee_home.dart';
-import 'view/home/home_roles/renter_home.dart';
 import 'view/auth/welcome_screen.dart';
 
 void main() {

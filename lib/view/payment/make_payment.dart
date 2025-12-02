@@ -29,10 +29,10 @@ class _MakePaymentScreenState extends State<MakePaymentScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Processing Payment')),
-      body: Center(
+      body: const Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
+          children: [
             CircularProgressIndicator(),
             SizedBox(height: 20),
             Text('Payment is being processed...'),

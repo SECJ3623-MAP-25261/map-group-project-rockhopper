@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../home/search_screen.dart';
 
 class RenteeHome extends StatelessWidget {
   const RenteeHome({super.key});
@@ -76,17 +77,30 @@ class SearchDevice extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      decoration: InputDecoration(
-        hintText: "Search Device",
-        filled: true,
-        fillColor: Colors.grey[200],
-        border: OutlineInputBorder(
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const SearchScreen(),
+          ),
+        );
+      },
+      child: Container(
+        decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide.none,
+          color: Colors.grey[200],
         ),
-        prefixIcon: const Icon(Icons.search),
-        suffixIcon: const Icon(Icons.filter_list),
+        child: const IgnorePointer(
+          child: TextField(
+            decoration: InputDecoration(
+              hintText: "Search Device",
+              border: InputBorder.none,
+              prefixIcon: Icon(Icons.search),
+              suffixIcon: Icon(Icons.filter_list),
+            ),
+          ),
+        ),
       ),
     );
   }

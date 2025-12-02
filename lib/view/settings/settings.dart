@@ -68,13 +68,13 @@ Navigator.push(
     );
               },
             ),
-  Row(crossAxisAlignment: CrossAxisAlignment.start,
+  const Row(crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
+            Text(
               'App Settings',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 10),
+            SizedBox(height: 10),
           ]
   ),
             

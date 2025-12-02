@@ -11,11 +11,16 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
+  
+  # Add these dependencies:
+  table_calendar: any   # For calendar in rentee listings
+  intl: ^0.19.0           # Often needed with table_calendar
+  cupertino_icons: ^1.0.2 # For iOS-style icons
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+    # For code generation if needed
 
 flutter:
   uses-material-design: true

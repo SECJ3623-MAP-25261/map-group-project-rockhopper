@@ -60,7 +60,7 @@ class PreferenceFilteredScreen extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(context, 
                       MaterialPageRoute(builder: 
-                      (_) => ChooseRoleScreen() )
+                      (_) => const ChooseRoleScreen() )
                       );
                     },
                     child: const Text("Can I go now?"),
@@ -70,7 +70,7 @@ class PreferenceFilteredScreen extends StatelessWidget {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (_) => EditProfile(),
+        builder: (_) => const EditProfile(),
       ),
     );
   },

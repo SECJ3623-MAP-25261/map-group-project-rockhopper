@@ -67,7 +67,7 @@ Widget build(BuildContext context) {
               decoration: InputDecoration(
                 labelText: 'Rental Price per Day',
                 border: OutlineInputBorder(),
-                prefixText: '\RM',
+                prefixText: 'RM',
               ),
               keyboardType: TextInputType.number,
             ),
@@ -78,7 +78,7 @@ Widget build(BuildContext context) {
               decoration: InputDecoration(
                 labelText: 'Deposit',
                 border: OutlineInputBorder(),
-                prefixText: '\RM',
+                prefixText: 'RM',
               ),
               keyboardType: TextInputType.number,
             ),
@@ -89,7 +89,7 @@ Widget build(BuildContext context) {
                       labelText: 'Category',
                       border:OutlineInputBorder(),  
                     ),
-              value: selectedCategory,
+              initialValue: selectedCategory,
               items: <String>['Tablets', 'Laptops', 'Phones', 'XR/VR Box']
             .map((String value) {
           return DropdownMenuItem<String>(
@@ -110,7 +110,7 @@ Widget build(BuildContext context) {
                       labelText: 'Category',
                       border:OutlineInputBorder(),  
                     ),
-              value: selectedCategory,
+              initialValue: selectedCategory,
               items: <String>['Tablets', 'Laptops', 'Phones', 'XR/VR Box']
             .map((String value) {
           return DropdownMenuItem<String>(

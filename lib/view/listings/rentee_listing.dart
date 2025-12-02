@@ -1,6 +1,5 @@
-/*import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
-import '../cart/cart_manager.dart';
 
 class RenteeListing extends StatefulWidget {
   final String name;
@@ -94,8 +93,7 @@ class _RenteeListingState extends State<RenteeListing> {
                 }
 
                 // Check if booked
-                if (widget.bookedSlots.any(
-                    (d) => isSameDay(d, selectedDay!))) {
+                if (widget.bookedSlots.any((d) => isSameDay(d, selectedDay!))) {
                   showDialog(
                     context: context,
                     builder: (_) => const AlertDialog(
@@ -108,20 +106,21 @@ class _RenteeListingState extends State<RenteeListing> {
                   return;
                 }
 
-                // VALID → add to cart
-                CartManager().addToCart(
+                // VALID → Show success message (cart functionality commented out)
+                /* CartManager().addToCart(
                   CartItem(
                     name: widget.name,
                     price: widget.price,
                     selectedDay: selectedDay!,
                   ),
-                );
+                ); */
 
                 showDialog(
                   context: context,
                   builder: (_) => AlertDialog(
-                    title: const Text("Added to Cart"),
-                    content: const Text("The item has been added to your cart."),
+                    title: const Text("Item Selected"),
+                    content: Text(
+                        "${widget.name} selected for ${selectedDay!.day}/${selectedDay!.month}/${selectedDay!.year}"),
                     actions: [
                       TextButton(
                         onPressed: () {
@@ -140,5 +139,19 @@ class _RenteeListingState extends State<RenteeListing> {
       ),
     );
   }
+}
+
+// CartItem class (commented out for now)
+/*
+class CartItem {
+  final String name;
+  final String price;
+  final DateTime selectedDay;
+
+  CartItem({
+    required this.name,
+    required this.price,
+    required this.selectedDay,
+  });
 }
 */

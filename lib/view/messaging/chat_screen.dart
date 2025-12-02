@@ -156,9 +156,9 @@ class _ChatScreenState extends State<ChatScreen> {
                 
                 Row(
                   children: [
-                    Text(
+                    const Text(
                       "RM 17/day",
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
