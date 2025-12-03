@@ -1,230 +1,262 @@
-/*
+// edit_listing_windows.dart
 import 'package:flutter/material.dart';
-import 'package:table_calendar/table_calendar.dart';
+import 'package:pinjamtech_app/models/device_model.dart';
 
 class EditListingWindows extends StatefulWidget {
-  final String name;
-  final String price;
-  final bool available;
-  final String duration;
-  final String condition;
-  final String description;
-  final String category;
-
+  final Device device;
+  
   const EditListingWindows({
-    super.key,
-    required this.name,
-    required this.price,
-    required this.available,
-    required this.duration,
-    required this.condition,
-    required this.description,
-    required this.category,
-  });
+    Key? key,
+    required this.device,
+  }) : super(key: key);
 
   @override
   State<EditListingWindows> createState() => _EditListingWindowsState();
 }
 
 class _EditListingWindowsState extends State<EditListingWindows> {
-  late TextEditingController nameController;
-  late TextEditingController priceController;
-  late TextEditingController durationController;
-  late TextEditingController conditionController;
-  late TextEditingController descriptionController;
-  late TextEditingController categoryController;
-
-  bool availability = false;
-  DateTime focusedDay = DateTime.now();
-
-  // Example booked dates
-  final List<DateTime> bookedSlots = [
-    DateTime.utc(2025, 11, 5),
-    DateTime.utc(2025, 11, 6),
-    DateTime.utc(2025, 11, 7),
-    DateTime.utc(2025, 11, 8),
-    DateTime.utc(2025, 11, 9),
-    DateTime.utc(2025, 11, 20),
-  ];
+  late TextEditingController _nameController;
+  late TextEditingController _priceController;
+  late TextEditingController _descriptionController;
+  late bool _isAvailable;
+  String? _selectedCategory;
+  String? _selectedCondition;
 
   @override
   void initState() {
     super.initState();
-    nameController = TextEditingController(text: widget.name);
-    priceController = TextEditingController(text: widget.price);
-    durationController = TextEditingController(text: widget.duration);
-    conditionController = TextEditingController(text: widget.condition);
-    descriptionController = TextEditingController(text: widget.description);
-    categoryController = TextEditingController(text: widget.category);
+    _nameController = TextEditingController(text: widget.device.name);
+    _priceController = TextEditingController(text: widget.device.pricePerDay.toString());
+    _descriptionController = TextEditingController(text: widget.device.description);
+    _isAvailable = widget.device.isAvailable;
+    _selectedCategory = widget.device.category;
+    _selectedCondition = widget.device.condition;
+  }
 
-    availability = widget.available;
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _priceController.dispose();
+    _descriptionController.dispose();
+    super.dispose();
+  }
+
+  void _saveChanges() {
+    // TODO: Save changes to backend
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Changes saved successfully')),
+    );
+    Navigator.pop(context);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Edit Listing"),
+        title: const Text('Edit Listing'),
+        actions: [
+          TextButton(
+            onPressed: _saveChanges,
+            child: const Text(
+              'Save',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Image placeholder
-            Container(
-              height: 170,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: Colors.grey[300],
-                borderRadius: BorderRadius.circular(14),
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(14),
-                child: Image.network(
-                  "https://www.cnet.com/a/img/resize/fb5194cdd6cd0cefbf020204f7d35cd48b8ed787/hub/2020/01/28/5284e5a2-1519-4d09-a07e-d50b317c954e/01-acer-nitro-5-an517-51-56yw.jpg?auto=webp&width=768",
-                  fit: BoxFit.cover,
-                ),
+            // Image Section
+            Center(
+              child: Stack(
+                children: [
+                  Container(
+                    width: 120,
+                    height: 120,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: Colors.grey[300]!),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: Image.network(
+                        widget.device.imageUrl,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return const Icon(Icons.camera_alt, size: 40);
+                        },
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.blue,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: IconButton(
+                        icon: const Icon(Icons.edit, size: 20, color: Colors.white),
+                        onPressed: () {
+                          // TODO: Implement image picker
+                        },
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-
             const SizedBox(height: 20),
 
-            // Listing title
-            _label("Listing Title"),
-            _textField(nameController),
-
+            // Item Name
+            TextField(
+              controller: _nameController,
+              decoration: const InputDecoration(
+                labelText: 'Item Name',
+                border: OutlineInputBorder(),
+              ),
+            ),
             const SizedBox(height: 20),
 
-            // Price
-            _label("Price (RM)"),
-            _textField(priceController, inputType: TextInputType.number),
-
+            // Brand
+            TextField(
+              readOnly: true,
+              decoration: InputDecoration(
+                labelText: 'Brand',
+                border: const OutlineInputBorder(),
+                suffixIcon: const Icon(Icons.lock),
+                hintText: widget.device.brand,
+              ),
+            ),
             const SizedBox(height: 20),
 
-            // Availability
-            _label("Availability"),
+            // Rental Price
+            TextField(
+              controller: _priceController,
+              decoration: const InputDecoration(
+                labelText: 'Rental Price per Day',
+                border: OutlineInputBorder(),
+                prefixText: 'RM ',
+              ),
+              keyboardType: TextInputType.number,
+            ),
+            const SizedBox(height: 20),
+
+            // Availability Toggle
             SwitchListTile(
-              title: Text(availability ? "Available" : "Unavailable"),
-              value: availability,
-              onChanged: (val) {
-                setState(() => availability = val);
+              title: const Text('Available for Rent'),
+              value: _isAvailable,
+              onChanged: (value) {
+                setState(() {
+                  _isAvailable = value;
+                });
               },
             ),
 
+            // Category Dropdown
+            DropdownButtonFormField<String>(
+              decoration: const InputDecoration(
+                labelText: 'Category',
+                border: OutlineInputBorder(),
+              ),
+              value: _selectedCategory,
+              items: <String>['Laptops', 'Tablets', 'Phones', 'XR/VR Box', 'Accessories', 'Other']
+                  .map((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+              onChanged: (String? newValue) {
+                setState(() {
+                  _selectedCategory = newValue;
+                });
+              },
+            ),
             const SizedBox(height: 20),
 
-            // Duration
-            _label("Rental Duration"),
-            _textField(durationController),
-
+            // Condition Dropdown
+            DropdownButtonFormField<String>(
+              decoration: const InputDecoration(
+                labelText: 'Condition',
+                border: OutlineInputBorder(),
+              ),
+              value: _selectedCondition,
+              items: <String>['Like New', 'Excellent', 'Good', 'Fair', 'Poor']
+                  .map((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+              onChanged: (String? newValue) {
+                setState(() {
+                  _selectedCondition = newValue;
+                });
+              },
+            ),
             const SizedBox(height: 20),
 
-            // Condition
-            _label("Condition"),
-            _textField(conditionController),
-
-            const SizedBox(height: 20),
-
-            // Category
-            _label("Category"),
-            _textField(categoryController),
-
+            // Max Rental Days
+            ListTile(
+              title: const Text('Maximum Rental Days'),
+              subtitle: Text('${widget.device.maxRentalDays} days'),
+              trailing: const Icon(Icons.lock, color: Colors.grey),
+            ),
             const SizedBox(height: 20),
 
             // Description
-            _label("Description"),
-            _textField(descriptionController, maxLines: 4),
-
-            const SizedBox(height: 30),
-
-            const Text(
-              "Booked Slots",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-
-            const SizedBox(height: 12),
-
-            TableCalendar(
-              locale: "en_US",
-              rowHeight: 40,
-              headerStyle: const HeaderStyle(
-                titleCentered: true,
-                formatButtonVisible: false,
-              ),
-              firstDay: DateTime.utc(2025, 1, 1),
-              lastDay: DateTime.utc(2030, 12, 31),
-              focusedDay: focusedDay,
-              availableGestures: AvailableGestures.none,
-              calendarBuilders: CalendarBuilders(
-                defaultBuilder: (context, day, _) {
-                  if (bookedSlots.any((d) => isSameDay(d, day))) {
-                    return Container(
-                      margin: const EdgeInsets.all(6),
-                      decoration: BoxDecoration(
-                        color: Colors.red,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Center(
-                        child: Text(
-                          "${day.day}",
-                          style: const TextStyle(color: Colors.white),
-                        ),
-                      ),
-                    );
-                  }
-                  return null;
-                },
+            TextField(
+              controller: _descriptionController,
+              maxLines: 4,
+              decoration: const InputDecoration(
+                labelText: 'Description',
+                border: OutlineInputBorder(),
+                alignLabelWithHint: true,
               ),
             ),
+            const SizedBox(height: 20),
 
-            const SizedBox(height: 40),
-
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context, {
-                  "name": nameController.text,
-                  "price": priceController.text,
-                  "available": availability,
-                  "duration": durationController.text,
-                  "condition": conditionController.text,
-                  "description": descriptionController.text,
-                  "category": categoryController.text,
-                });
-              },
-              style: ElevatedButton.styleFrom(
-                minimumSize: const Size(double.infinity, 48),
+            // Booked Slots Info
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Booking Information',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Currently ${widget.device.bookedSlots.length} booked dates',
+                      style: TextStyle(
+                        color: Colors.grey[600],
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    const Text(
+                      'Booked dates cannot be modified. To cancel bookings, please contact renters.',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.orange,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              child: const Text("Save Changes"),
             ),
           ],
         ),
       ),
     );
   }
-
-  // COMPONENTS
-  Widget _label(String text) {
-    return Text(
-      text,
-      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-    );
-  }
-
-  Widget _textField(TextEditingController controller,
-      {int maxLines = 1, TextInputType inputType = TextInputType.text}) {
-    return TextField(
-      controller: controller,
-      maxLines: maxLines,
-      keyboardType: inputType,
-      decoration: InputDecoration(
-        filled: true,
-        fillColor: Colors.grey[200],
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-      ),
-    );
-  }
 }
-*/

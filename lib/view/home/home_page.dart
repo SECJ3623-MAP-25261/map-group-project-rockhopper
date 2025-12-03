@@ -1,6 +1,7 @@
-import 'package:flutter/material.dart';
+/*import 'package:flutter/material.dart';
 import '../home/home_roles/rentee_home.dart';
 import '../home/home_roles/renter_home.dart';
+//import '../listings/createlist.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -119,6 +120,7 @@ class CreateList extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Scaffold(
       body: Center(child: Text("Create New Listing Page", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold))),
+
     );
   }
 }
@@ -133,3 +135,4 @@ class ProfilePage extends StatelessWidget {
     );
   }
 }
+*/

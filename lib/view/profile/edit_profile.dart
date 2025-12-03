@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
-import '../profile/profile.dart';
+import 'user_model.dart'; // Make sure you have UserProfile class
 
 class EditProfile extends StatelessWidget {
-  const EditProfile({super.key});
+  final UserProfile? user; // pass current user profile
+
+  const EditProfile({super.key, this.user});
 
   @override
   Widget build(BuildContext context) {
-    final firstNameController = TextEditingController();
-    final lastNameController = TextEditingController();
-    final usernameController = TextEditingController();
-    final emailController = TextEditingController();
-    final phoneController = TextEditingController();
-    final genderController = TextEditingController();
+    // Initialize controllers with existing values if available
+    final firstNameController = TextEditingController(text: user?.firstName ?? '');
+    final lastNameController = TextEditingController(text: user?.lastName ?? '');
+    final usernameController = TextEditingController(text: user?.username ?? '');
+    final emailController = TextEditingController(text: user?.email ?? '');
+    final phoneController = TextEditingController(text: user?.phone ?? '');
+    final genderController = TextEditingController(text: user?.gender ?? '');
 
     return Scaffold(
       appBar: AppBar(
@@ -59,25 +62,23 @@ class EditProfile extends StatelessWidget {
             Center(
               child: ElevatedButton(
                 onPressed: () {
+                  // Create updated UserProfile
+                  final updatedUser = UserProfile(
+                    firstName: firstNameController.text,
+                    lastName: lastNameController.text,
+                    username: usernameController.text,
+                    email: emailController.text,
+                    gender: genderController.text,
+                    phone: phoneController.text,
+                  );
+
                   // Show snackbar
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Profile updated!')),
                   );
 
-                  // Navigate to ProfilePage
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => ProfilePage(
-                        firstName: firstNameController.text,
-                        lastName: lastNameController.text,
-                        username: usernameController.text,
-                        email: emailController.text,
-                        gender: genderController.text,
-                        phone: phoneController.text,
-                      ),
-                    ),
-                  );
+                  // Return updated user to previous page
+                  Navigator.pop(context, updatedUser);
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blueGrey[300],

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'renter_home.dart';
+
 import 'rentee_home.dart';
+import '../rentee.dart';
+import '../renter.dart';
+
 
 class ChooseRoleScreen extends StatelessWidget {
   const ChooseRoleScreen({super.key});
@@ -25,7 +28,7 @@ class ChooseRoleScreen extends StatelessWidget {
   onPressed: () {
     Navigator.push(
       context, 
-      MaterialPageRoute(builder: (context) => RenterHome()),
+      MaterialPageRoute(builder: (context) => RenterMain()),
     );
   },
   child: const Text("Renter"),
@@ -37,7 +40,7 @@ ElevatedButton(
   onPressed: () {
     Navigator.push(
       context, 
-      MaterialPageRoute(builder: (context) => RenteeHome()),
+      MaterialPageRoute(builder: (context) => RenteeMain()),
     );
   },
   child: const Text("Rentee"),
@@ -49,3 +52,4 @@ ElevatedButton(
     );
   }
 }
+
